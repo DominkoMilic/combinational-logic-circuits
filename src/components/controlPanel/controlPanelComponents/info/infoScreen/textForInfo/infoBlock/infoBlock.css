@@ -1,0 +1,29 @@
+.info-block-container {
+  height: 100%;
+  width: 100%;
+  font-size: large;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.body-text {
+  width: 85%;
+}
+
+a {
+  color: #520760;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .info-block-container {
+    font-size: small;
+  }
+}

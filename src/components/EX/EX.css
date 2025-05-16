@@ -1,0 +1,70 @@
+.EXNOR {
+  cursor: grab;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+}
+
+.EXOR {
+  cursor: grab;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+}
+
+.EXNOR-element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.EXNOR-image,
+.EXOR-image {
+  width: 90px;
+  height: 90px;
+  display: flex;
+  background-image: url("../images/EXNOR.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.EXOR-image {
+  width: 90px;
+  height: 90px;
+  background-image: url("../images/EXOR.png");
+}
+
+.all-EXNOR-inputs,
+.all-EXOR-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 63px;
+}
+
+.all-EXOR-inputs {
+  height: 73px;
+}
+
+.EXNOR-input,
+.EXNOR-output {
+  position: relative;
+  cursor: pointer;
+  width: 10px;
+  height: 5px;
+  background-color: black;
+}
+
+.EXNOR-input::before,
+.EXNOR-output::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  pointer-events: all;
+}

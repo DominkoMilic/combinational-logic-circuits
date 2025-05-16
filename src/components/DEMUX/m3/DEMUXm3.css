@@ -1,0 +1,61 @@
+.DEMUXm3 {
+  cursor: grab;
+  width: 150px;
+  height: 150px;
+  position: absolute;
+}
+
+.DEMUXm3-element {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.DEMUXm3-image {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  background-image: url("../../images/DEMUXm3.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.all-DEMUXm3-inputs {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  position: absolute;
+  top: 3%;
+  left: 8%;
+  width: 90%;
+}
+
+.all-DEMUXm3-outputs {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  position: absolute;
+  bottom: 3%;
+  left: 8%;
+  width: 90%;
+}
+
+.DEMUXm3-input,
+.DEMUXm3-output {
+  position: relative;
+  cursor: pointer;
+  width: 10px;
+  height: 15px;
+  background-color: black;
+}
+
+.DEMUXm3-input::before,
+.DEMUXm3-output::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -3px;
+  width: 15px;
+  height: 40px;
+  background: transparent;
+  pointer-events: all;
+}

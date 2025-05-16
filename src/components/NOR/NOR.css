@@ -1,0 +1,78 @@
+.NOR {
+  cursor: grab;
+  width: 90px;
+  height: 90px;
+  position: absolute;
+}
+
+.NOR-element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.NOR-image2,
+.NOR-image3,
+.NOR-image4,
+.NOR-image8 {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  background-image: url("../images/NOR2I.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.NOR-image3 {
+  background-image: url("../images/NOR3I.png");
+}
+
+.NOR-image4 {
+  background-image: url("../images/NOR4I.png");
+}
+
+.NOR-image8 {
+  background-image: url("../images/NOR8I.png");
+}
+
+.all-NOR-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+
+.NOR-input,
+.NOR-output {
+  position: relative;
+  cursor: pointer;
+  width: 10px;
+  height: 5px;
+  background-color: black;
+}
+
+.NOR-input::before,
+.NOR-output::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: -15px;
+  width: 40px;
+  height: 17px;
+  background: transparent;
+  pointer-events: all;
+}
+
+.eight .NOR-input::before,
+.eight .NOR-output::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -15px;
+  width: 40px;
+  height: 7px;
+  background: transparent;
+  pointer-events: all;
+}

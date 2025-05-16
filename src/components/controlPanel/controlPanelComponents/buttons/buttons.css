@@ -1,0 +1,28 @@
+.control-buttons {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.CP-button,
+.reset-button,
+.clear-button,
+.load-button,
+.save-button {
+  width: fit-content;
+  height: 70%;
+  font-size: small;
+  font-weight: bolder;
+  border-radius: 4px;
+  margin: 3%;
+  padding: 0 15%;
+}
+
+.CP-button:hover,
+.reset-button:hover,
+.clear-button:hover,
+.load-button:hover,
+.save-button:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}

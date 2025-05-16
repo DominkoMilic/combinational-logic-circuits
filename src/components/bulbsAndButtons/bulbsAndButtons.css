@@ -1,0 +1,52 @@
+.input-buttons {
+  display: flex;
+  text-align: center;
+  width: 100%;
+  height: 70%;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1px;
+}
+
+.one-above {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.variable-names,
+.zero,
+.one {
+  width: 100%;
+  height: 30%;
+  border: 1px solid black;
+  background-color: grey;
+  font-weight: bold;
+  font-size: small;
+}
+
+.NOTX {
+  text-decoration: overline;
+  text-decoration-thickness: 2px;
+  line-height: 2;
+}
+
+.constants {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex-direction: column;
+}
+
+.zero,
+.one {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  margin-top: 5%;
+}

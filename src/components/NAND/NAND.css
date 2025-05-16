@@ -1,0 +1,63 @@
+.NAND {
+  cursor: grab;
+  width: 90px;
+  height: 90px;
+  position: absolute;
+}
+
+.NAND-element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.NAND-image {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  background-image: url("../images/NAND.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.all-NAND-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+
+.NAND-input,
+.NAND-output {
+  position: relative;
+  cursor: pointer;
+  width: 10px;
+  height: 5px;
+  background-color: black;
+}
+
+.NAND-input::before,
+.NAND-output::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: -15px;
+  width: 40px;
+  height: 17px;
+  background: transparent;
+  pointer-events: all;
+}
+
+.eight .NAND-input::before,
+.eight .NAND-output::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -15px;
+  width: 40px;
+  height: 7px;
+  background: transparent;
+  pointer-events: all;
+}

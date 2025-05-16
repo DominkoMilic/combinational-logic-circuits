@@ -1,0 +1,61 @@
+.jkFlipFlop {
+  cursor: grab;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+}
+
+.jkFlipFlop-element {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.jkFlipFlop-image {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  background-image: url("../images/JKflip-flop.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.all-jkFlipFlop-inputs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  position: absolute;
+  top: -10%;
+  left: 15%;
+  width: 80%;
+}
+
+.all-jkFlipFlop-outputs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  position: absolute;
+  bottom: -10%;
+  left: 13%;
+  width: 80%;
+}
+
+.jkFlipFlop-input,
+.jkFlipFlop-output {
+  position: relative;
+  cursor: pointer;
+  width: 10px;
+  height: 15px;
+  background-color: black;
+}
+
+.jkFlipFlop-input::before,
+.jkFlipFlop-output::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -2px;
+  width: 15px;
+  height: 40px;
+  background: transparent;
+  pointer-events: all;
+}

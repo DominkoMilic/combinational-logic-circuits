@@ -1,0 +1,61 @@
+.dFlipFlop {
+  cursor: grab;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+}
+
+.dFlipFlop-element {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.dFlipFlop-image {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  background-image: url("../images/Dflip-flop.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.all-dFlipFlop-inputs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  position: absolute;
+  top: -10%;
+  left: 18%;
+  width: 73%;
+}
+
+.all-dFlipFlop-outputs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  position: absolute;
+  bottom: -10%;
+  left: 18%;
+  width: 73%;
+}
+
+.dFlipFlop-input,
+.dFlipFlop-output {
+  position: relative;
+  cursor: pointer;
+  width: 10px;
+  height: 15px;
+  background-color: black;
+}
+
+.dFlipFlop-input::before,
+.dFlipFlop-output::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -3px;
+  width: 15px;
+  height: 40px;
+  background: transparent;
+  pointer-events: all;
+}

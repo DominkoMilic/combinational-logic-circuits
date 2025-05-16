@@ -1,0 +1,61 @@
+.MUXm2 {
+  cursor: grab;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+}
+
+.MUXm2-element {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.MUXm2-image {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  background-image: url("../../images/MUXm2.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.all-MUXm2-inputs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  position: absolute;
+  top: -11%;
+  left: 13%;
+  width: 80%;
+}
+
+.all-MUXm2-outputs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  position: absolute;
+  bottom: -10%;
+  left: 13%;
+  width: 80%;
+}
+
+.MUXm2-input,
+.MUXm2-output {
+  position: relative;
+  cursor: pointer;
+  width: 10px;
+  height: 15px;
+  background-color: black;
+}
+
+.MUXm2-input::before,
+.MUXm2-output::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -3px;
+  width: 15px;
+  height: 40px;
+  background: transparent;
+  pointer-events: all;
+}

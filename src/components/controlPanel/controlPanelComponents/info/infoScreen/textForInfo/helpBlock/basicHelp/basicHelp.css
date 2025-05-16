@@ -1,0 +1,27 @@
+.help-content {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.help-content h2 {
+  margin-bottom: 0;
+}
+
+.help-content ul {
+  padding: 0;
+  list-style: none;
+}
+
+.help-content li strong {
+  color: black;
+}
+
+.button-name {
+  color: #520760;
+  text-decoration: none;
+  font-weight: bold;
+}

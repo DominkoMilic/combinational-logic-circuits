@@ -1,0 +1,9 @@
+.text {
+  display: block;
+  width: 90%;
+  height: 80%;
+  margin: auto;
+  text-align: center;
+  color: white;
+  font-size: 30px;
+}
