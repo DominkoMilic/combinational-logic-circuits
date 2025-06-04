@@ -73,6 +73,15 @@ function App() {
     },
   ]);
 
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  useEffect(() => {
+    const screenWidth = window.innerWidth;
+    if (screenWidth < 900) {
+      setIsSmallScreen(true);
+    }
+  }, []);
+
   const handleElementClick = (element, event, cableOption, iNumber) => {
     const { clientX, clientY } = event;
     const position =
@@ -236,6 +245,17 @@ function App() {
       )
     );
   };
+
+  if (isSmallScreen) {
+    return (
+      <div style={{ padding: "2rem", textAlign: "center" }}>
+        <h1>Screen Too Small</h1>
+        <p>
+          We are sorry but app currently do not support small screen devices.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="App">
