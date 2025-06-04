@@ -28,206 +28,40 @@ const ScrollBox = ({ setFunctions }) => {
     setEncoderElements,
   } = setFunctions;
 
-  const handleAddNOT = () => {
-    setNotElements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `NOT-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
+  const elementSetters = {
+    NOT: setNotElements,
+    buffer: setBufferElements,
+    NOR2Inputs: setNor2InputsElements,
+    NOR3Inputs: setNor3InputsElements,
+    NOR4Inputs: setNor4InputsElements,
+    NOR8Inputs: setNor8InputsElements,
+    NAND2Inputs: setNand2InputsElements,
+    NAND3Inputs: setNand3InputsElements,
+    NAND4Inputs: setNand4InputsElements,
+    NAND8Inputs: setNand8InputsElements,
+    EXNOR: setExNorElements,
+    EXOR: setExOrElements,
+    DEMUXm2: setDemuxm2Elements,
+    DEMUXm3: setDemuxm3Elements,
+    MUXm1: setMuxm1Elements,
+    MUXm2: setMuxm2Elements,
+    MUXm3: setMuxm3Elements,
+    encoder: setEncoderElements,
   };
 
-  const handleAddBuffer = () => {
-    setBufferElements((prev) => {
+  const handleAddElement = (type) => {
+    const setFunction = elementSetters[type];
+    if (!setFunction) {
+      console.error(`No setter found for element type: ${type}`);
+      return;
+    }
+
+    setFunction((prev) => {
       const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
       const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
       return [
         ...prev,
-        { id: `buffer-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
-  };
-
-  const handleAddNOR2Inputs = () => {
-    setNor2InputsElements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `NOR2Inputs-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
-  };
-
-  const handleAddNOR3Inputs = () => {
-    setNor3InputsElements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `NOR3Inputs-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
-  };
-
-  const handleAddNOR4Inputs = () => {
-    setNor4InputsElements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `NOR4Inputs-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
-  };
-
-  const handleAddNOR8Inputs = () => {
-    setNor8InputsElements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `NOR8Inputs-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
-  };
-
-  const handleAddNAND2Inputs = () => {
-    setNand2InputsElements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `NAND2Inputs-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
-  };
-
-  const handleAddNAND3Inputs = () => {
-    setNand3InputsElements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `NAND3Inputs-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
-  };
-
-  const handleAddNAND4Inputs = () => {
-    setNand4InputsElements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `NAND4Inputs-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
-  };
-
-  const handleAddNAND8Inputs = () => {
-    setNand8InputsElements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `NAND8Inputs-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
-  };
-
-  const handleAddEXNOR = () => {
-    setExNorElements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `EXNOR-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
-  };
-
-  const handleAddEXOR = () => {
-    setExOrElements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `EXOR-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
-  };
-
-  const handleAddDEMUXm2 = () => {
-    setDemuxm2Elements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `DEMUXm2-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
-  };
-
-  const handleAddDEMUXm3 = () => {
-    setDemuxm3Elements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `DEMUXm3-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
-  };
-
-  const handleAddMUXm3 = () => {
-    setMuxm3Elements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `MUXm3-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
-  };
-
-  const handleAddMUXm2 = () => {
-    setMuxm2Elements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `MUXm2-${nextId}`, value: "0", position: { x: 0, y: 0 } },
-      ];
-    });
-  };
-
-  const handleAddMUXm1 = () => {
-    setMuxm1Elements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        { id: `MUXm1-${nextId}`, value: "0", position: { x: 0, y: 0 } },
+        { id: `${type}-${nextId}`, value: "0", position: { x: 0, y: 0 } },
       ];
     });
   };
@@ -266,59 +100,87 @@ const ScrollBox = ({ setFunctions }) => {
     });
   };
 
-  const handleAddEncoder = () => {
-    setEncoderElements((prev) => {
-      const existingIds = prev.map((el) => parseInt(el.id.split("-")[1], 10));
-      const nextId = existingIds.length ? Math.max(...existingIds) + 1 : 0;
-
-      return [
-        ...prev,
-        {
-          id: `PriorityEncoder-${nextId}`,
-          value: "0",
-          position: { x: 0, y: 0 },
-        },
-      ];
-    });
-  };
-
   const components = [
-    { key: "buffer", label: "Buffer", handler: handleAddBuffer },
-    { key: "NOT", label: "NOT", handler: handleAddNOT },
-    { key: "NOR2Inputs", label: "NOR 2 inputs", handler: handleAddNOR2Inputs },
-    { key: "NOR3Inputs", label: "NOR 3 inputs", handler: handleAddNOR3Inputs },
-    { key: "NOR4Inputs", label: "NOR 4 inputs", handler: handleAddNOR4Inputs },
-    { key: "NOR8Inputs", label: "NOR 8 inputs", handler: handleAddNOR8Inputs },
+    {
+      key: "buffer",
+      label: "Buffer",
+      handler: () => handleAddElement("buffer"),
+    },
+    { key: "NOT", label: "NOT", handler: () => handleAddElement("NOT") },
+    {
+      key: "NOR2Inputs",
+      label: "NOR 2 inputs",
+      handler: () => handleAddElement("NOR2Inputs"),
+    },
+    {
+      key: "NOR3Inputs",
+      label: "NOR 3 inputs",
+      handler: () => handleAddElement("NOR3Inputs"),
+    },
+    {
+      key: "NOR4Inputs",
+      label: "NOR 4 inputs",
+      handler: () => handleAddElement("NOR4Inputs"),
+    },
+    {
+      key: "NOR8Inputs",
+      label: "NOR 8 inputs",
+      handler: () => handleAddElement("NOR8Inputs"),
+    },
     {
       key: "NAND2Inputs",
       label: "NAND 2 inputs",
-      handler: handleAddNAND2Inputs,
+      handler: () => handleAddElement("NAND2Inputs"),
     },
     {
       key: "NAND3Inputs",
       label: "NAND 3 inputs",
-      handler: handleAddNAND3Inputs,
+      handler: () => handleAddElement("NAND3Inputs"),
     },
     {
       key: "NAND4Inputs",
       label: "NAND 4 inputs",
-      handler: handleAddNAND4Inputs,
+      handler: () => handleAddElement("NAND4Inputs"),
     },
     {
       key: "NAND8Inputs",
       label: "NAND 8 inputs",
-      handler: handleAddNAND8Inputs,
+      handler: () => handleAddElement("NAND8Inputs"),
     },
-    { key: "EXOR", label: "EXOR", handler: handleAddEXOR },
-    { key: "EXNOR", label: "EXNOR", handler: handleAddEXNOR },
-    { key: "DEMUXm2", label: "DEMUX m=2", handler: handleAddDEMUXm2 },
-    { key: "DEMUXm3", label: "DEMUX m=3", handler: handleAddDEMUXm3 },
-    { key: "MUXm1", label: "MUX m=1", handler: handleAddMUXm1 },
-    { key: "MUXm2", label: "MUX m=2", handler: handleAddMUXm2 },
-    { key: "MUXm3", label: "MUX m=3", handler: handleAddMUXm3 },
+    { key: "EXOR", label: "EXOR", handler: () => handleAddElement("EXOR") },
+    { key: "EXNOR", label: "EXNOR", handler: () => handleAddElement("EXNOR") },
+    {
+      key: "DEMUXm2",
+      label: "DEMUX m=2",
+      handler: () => handleAddElement("DEMUXm2"),
+    },
+    {
+      key: "DEMUXm3",
+      label: "DEMUX m=3",
+      handler: () => handleAddElement("DEMUXm3"),
+    },
+    {
+      key: "MUXm1",
+      label: "MUX m=1",
+      handler: () => handleAddElement("MUXm1"),
+    },
+    {
+      key: "MUXm2",
+      label: "MUX m=2",
+      handler: () => handleAddElement("MUXm2"),
+    },
+    {
+      key: "MUXm3",
+      label: "MUX m=3",
+      handler: () => handleAddElement("MUXm3"),
+    },
+    {
+      key: "encoder",
+      label: "Priority encoder",
+      handler: () => handleAddElement("encoder"),
+    },
     { key: "DFlipFlop", label: "D flip-flop", handler: handleAddDFlipFlop },
     { key: "JKFlipFlop", label: "JK flip-flop", handler: handleAddJKFlipFlop },
-    { key: "encoder", label: "Priority encoder", handler: handleAddEncoder },
   ];
 
   return (
