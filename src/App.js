@@ -193,7 +193,13 @@ function App() {
     } catch (error) {
       console.error("Error updating output values: ", error);
     }
-  }, [xVariableValues, cables, dFlipFlopElements, jkFlipFlopElements]);
+  }, [
+    xVariableValues,
+    cables,
+    dFlipFlopElements,
+    jkFlipFlopElements,
+    isDragging,
+  ]);
 
   useEffect(() => {
     const handleMouseDown = () => setIsDragging(true);
