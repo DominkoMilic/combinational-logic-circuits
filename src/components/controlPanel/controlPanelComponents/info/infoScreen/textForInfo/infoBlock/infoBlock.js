@@ -22,7 +22,14 @@ const InfoBlock = () => {
           dominkomilic@gmail.com
         </a>
         <br />
-        📄 Download my thesis: [Link to thesis PDF or Google Drive] <br />
+        📄 Download my thesis{" "}
+        <a
+          href="/Završni_rad_Dominko_Milić_-_Simulacija_digitalnih_sklopova_koristenjem_React_js-e17da7b1b1.pdf"
+          download
+        >
+          here
+        </a>{" "}
+        <br />
         🌐 View my work on GitHub:{" "}
         <a
           href="https://github.com/DominkoMilic?tab=repositories"
