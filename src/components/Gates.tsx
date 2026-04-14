@@ -40,6 +40,8 @@ const elementTypeToConfig: Record<string, string> = {
   DFlipFlop: "DFlipFlop",
   JKFlipFlop: "JKFlipFlop",
   encoder: "encoder",
+  Const0: "Const0",
+  Const1: "Const1",
 };
 
 function Gates({
