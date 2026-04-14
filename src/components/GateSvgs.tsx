@@ -1,4 +1,7 @@
 import React from "react";
+import type { PinConfig } from "../types";
+
+// ── Types ──
 
 interface SvgProps {
   width?: number;
@@ -6,76 +9,331 @@ interface SvgProps {
   className?: string;
 }
 
-// ────────────────────────────────────────────────
-//  Basic Gate SVGs (horizontal layout)
-// ────────────────────────────────────────────────
+export interface GateSvgProps extends SvgProps {
+  topPins?: PinConfig[];
+  bottomPins?: PinConfig[];
+  onPinContextMenu?: (pin: PinConfig, e: React.MouseEvent) => void;
+  pinRef?: (refIndex: number, refId: string, el: Element | null) => void;
+  onBodyContextMenu?: (e: React.MouseEvent) => void;
+}
 
-function BufferSvg({ width = 42, height = 42, className }: SvgProps) {
+interface PinPos {
+  x: number;  // endpoint x (cable connection point)
+  y: number;  // endpoint y
+  sx: number; // stub start x (at gate body edge)
+  sy: number; // stub start y
+}
+
+// ── Pin rendering sub-components ──
+
+function PinStubs({
+  pins,
+  pos,
+  sw = 3,
+}: {
+  pins: PinConfig[];
+  pos: Record<string, PinPos>;
+  sw?: number;
+}) {
   return (
-    <svg width={width} height={height} viewBox="0 0 100 100" className={className}>
-      <polygon points="12,8 88,50 12,92" fill="#999" stroke="#333" strokeWidth="6" strokeLinejoin="round" />
+    <>
+      {pins.map((pin) => {
+        const p = pos[pin.refId];
+        if (!p) return null;
+        return (
+          <line
+            key={`stub-${pin.refId}`}
+            x1={p.sx} y1={p.sy} x2={p.x} y2={p.y}
+            stroke="#333" strokeWidth={sw}
+          />
+        );
+      })}
+    </>
+  );
+}
+
+function PinTargets({
+  pins,
+  pos,
+  size = 16,
+  onCtx,
+  pRef,
+}: {
+  pins: PinConfig[];
+  pos: Record<string, PinPos>;
+  size?: number;
+  onCtx?: (pin: PinConfig, e: React.MouseEvent) => void;
+  pRef?: (refIndex: number, refId: string, el: Element | null) => void;
+}) {
+  const half = size / 2;
+  return (
+    <>
+      {pins.map((pin) => {
+        const p = pos[pin.refId];
+        if (!p) return null;
+        return (
+          <g key={`target-${pin.refId}`}>
+            {/* Tiny invisible rect for accurate position tracking */}
+            <rect
+              x={p.x} y={p.y} width="0.5" height="0.5"
+              fill="none" stroke="none"
+              ref={(el) => pRef?.(pin.refIndex, pin.refId, el)}
+            />
+            {/* Visible endpoint dot */}
+            <circle cx={p.x} cy={p.y} r="2.5" fill="#222" />
+            {/* Enlarged invisible click target */}
+            <rect
+              x={p.x - half} y={p.y - half}
+              width={size} height={size}
+              fill="transparent"
+              style={{ cursor: "pointer" }}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onCtx?.(pin, e);
+              }}
+            />
+          </g>
+        );
+      })}
+    </>
+  );
+}
+
+// ── Position calculation helpers ──
+
+function evenY(count: number, top = 10, bottom = 90): number[] {
+  const spacing = (bottom - top) / (count + 1);
+  return Array.from({ length: count }, (_, i) => top + spacing * (i + 1));
+}
+
+function buildHorizPins(
+  topPins: PinConfig[],
+  bottomPins: PinConfig[],
+  inputSx: number,
+  outputSx: number,
+): Record<string, PinPos> {
+  const p: Record<string, PinPos> = {};
+  const inYs = evenY(topPins.length);
+  topPins.forEach((pin, i) => {
+    p[pin.refId] = { x: -8, y: inYs[i], sx: inputSx, sy: inYs[i] };
+  });
+  const outYs = evenY(bottomPins.length);
+  bottomPins.forEach((pin, i) => {
+    p[pin.refId] = { x: 108, y: outYs[i], sx: outputSx, sy: outYs[i] };
+  });
+  return p;
+}
+
+function buildIcPins(
+  topPins: PinConfig[],
+  bottomPins: PinConfig[],
+  vb = 200,
+  m = 10,
+): Record<string, PinPos> {
+  const p: Record<string, PinPos> = {};
+  const bodyW = vb - 2 * m;
+
+  if (topPins.length > 0) {
+    const colW = bodyW / topPins.length;
+    topPins.forEach((pin, i) => {
+      const x = m + i * colW + colW / 2;
+      p[pin.refId] = { x, y: -8, sx: x, sy: m };
+    });
+  }
+
+  if (bottomPins.length > 0) {
+    const colW = bodyW / bottomPins.length;
+    bottomPins.forEach((pin, i) => {
+      const x = m + i * colW + colW / 2;
+      p[pin.refId] = { x, y: vb + 8, sx: x, sy: vb - m };
+    });
+  }
+
+  return p;
+}
+
+// ── Basic Gate Components ──
+
+function BufferSvg(props: GateSvgProps) {
+  const {
+    width = 42, height = 42, className,
+    topPins = [], bottomPins = [],
+    onPinContextMenu, pinRef, onBodyContextMenu,
+  } = props;
+  const allPins = [...topPins, ...bottomPins];
+  const hasPins = allPins.length > 0;
+  const pos = hasPins ? buildHorizPins(topPins, bottomPins, 18, 88) : {};
+
+  return (
+    <svg width={width} height={height} viewBox="0 0 100 100" className={className} overflow="visible">
+      {hasPins && <PinStubs pins={topPins} pos={pos} />}
+      <polygon
+        points="12,8 88,50 12,92"
+        fill="#999" stroke="#333" strokeWidth="6" strokeLinejoin="round"
+        onContextMenu={onBodyContextMenu}
+      />
+      {hasPins && <PinStubs pins={bottomPins} pos={pos} />}
+      {hasPins && (
+        <PinTargets pins={allPins} pos={pos} onCtx={onPinContextMenu} pRef={pinRef} />
+      )}
     </svg>
   );
 }
 
-function NotSvg({ width = 42, height = 42, className }: SvgProps) {
+function NotSvg(props: GateSvgProps) {
+  const {
+    width = 42, height = 42, className,
+    topPins = [], bottomPins = [],
+    onPinContextMenu, pinRef, onBodyContextMenu,
+  } = props;
+  const allPins = [...topPins, ...bottomPins];
+  const hasPins = allPins.length > 0;
+  const pos = hasPins ? buildHorizPins(topPins, bottomPins, 14, 84) : {};
+
   return (
-    <svg width={width} height={height} viewBox="0 0 100 100" className={className}>
-      <polygon points="8,8 66,50 8,92" fill="#999" stroke="#333" strokeWidth="6" strokeLinejoin="round" />
-      <circle cx="76" cy="50" r="8" fill="#999" stroke="#333" strokeWidth="4" />
+    <svg width={width} height={height} viewBox="0 0 100 100" className={className} overflow="visible">
+      {hasPins && <PinStubs pins={topPins} pos={pos} />}
+      <g onContextMenu={onBodyContextMenu}>
+        <polygon
+          points="8,8 66,50 8,92"
+          fill="#999" stroke="#333" strokeWidth="6" strokeLinejoin="round"
+        />
+        <circle cx="76" cy="50" r="8" fill="#999" stroke="#333" strokeWidth="4" />
+      </g>
+      {hasPins && <PinStubs pins={bottomPins} pos={pos} />}
+      {hasPins && (
+        <PinTargets pins={allPins} pos={pos} onCtx={onPinContextMenu} pRef={pinRef} />
+      )}
     </svg>
   );
 }
 
-function NorSvg({ width = 70, height = 70, className, inputs = 2 }: SvgProps & { inputs?: number }) {
-  const bodyPath = "M 20,10 Q 65,8 82,50 Q 65,92 20,90 Q 32,50 20,10 Z";
-  const spacing = 80 / (inputs + 1);
-  const stubs = Array.from({ length: inputs }, (_, i) => 10 + spacing * (i + 1));
+function NorSvg(props: GateSvgProps) {
+  const {
+    width = 70, height = 70, className,
+    topPins = [], bottomPins = [],
+    onPinContextMenu, pinRef, onBodyContextMenu,
+  } = props;
+  const allPins = [...topPins, ...bottomPins];
+  const hasPins = allPins.length > 0;
+  // Input stubs extend to x=30 (inside body curve), body covers the overlap
+  const pos = hasPins ? buildHorizPins(topPins, bottomPins, 30, 95) : {};
+  const nInputs = topPins.length;
 
   return (
-    <svg width={width} height={height} viewBox="0 0 100 100" className={className}>
-      {stubs.map((y, i) => (
-        <line key={i} x1="0" y1={y} x2="22" y2={y} stroke="#333" strokeWidth={inputs <= 4 ? 5 : 4} />
-      ))}
-      <path d={bodyPath} fill="#999" stroke="#333" strokeWidth="5" />
-      <circle cx="89" cy="50" r="6" fill="#999" stroke="#333" strokeWidth="3.5" />
+    <svg width={width} height={height} viewBox="0 0 100 100" className={className} overflow="visible">
+      {hasPins && <PinStubs pins={topPins} pos={pos} sw={nInputs <= 4 ? 3 : 2.5} />}
+      <g onContextMenu={onBodyContextMenu}>
+        <path
+          d="M 20,10 Q 65,8 82,50 Q 65,92 20,90 Q 32,50 20,10 Z"
+          fill="#999" stroke="#333" strokeWidth="5"
+        />
+        <circle cx="89" cy="50" r="6" fill="#999" stroke="#333" strokeWidth="3.5" />
+      </g>
+      {hasPins && <PinStubs pins={bottomPins} pos={pos} />}
+      {hasPins && (
+        <PinTargets
+          pins={allPins} pos={pos}
+          size={nInputs <= 4 ? 16 : 10}
+          onCtx={onPinContextMenu} pRef={pinRef}
+        />
+      )}
     </svg>
   );
 }
 
-function NandSvg({ width = 70, height = 70, className }: SvgProps) {
+function NandSvg(props: GateSvgProps) {
+  const {
+    width = 70, height = 70, className,
+    topPins = [], bottomPins = [],
+    onPinContextMenu, pinRef, onBodyContextMenu,
+  } = props;
+  const allPins = [...topPins, ...bottomPins];
+  const hasPins = allPins.length > 0;
+  const pos = hasPins ? buildHorizPins(topPins, bottomPins, 18, 101) : {};
+  const nInputs = topPins.length;
+
   return (
-    <svg width={width} height={height} viewBox="0 0 100 100" className={className}>
-      <path d="M 12,10 L 50,10 A 40,40 0 0 1 50,90 L 12,90 Z" fill="#999" stroke="#333" strokeWidth="5" />
-      <circle cx="95" cy="50" r="6" fill="#999" stroke="#333" strokeWidth="3.5" />
+    <svg width={width} height={height} viewBox="0 0 100 100" className={className} overflow="visible">
+      {hasPins && <PinStubs pins={topPins} pos={pos} sw={nInputs <= 4 ? 3 : 2.5} />}
+      <g onContextMenu={onBodyContextMenu}>
+        <path
+          d="M 12,10 L 50,10 A 40,40 0 0 1 50,90 L 12,90 Z"
+          fill="#999" stroke="#333" strokeWidth="5"
+        />
+        <circle cx="95" cy="50" r="6" fill="#999" stroke="#333" strokeWidth="3.5" />
+      </g>
+      {hasPins && <PinStubs pins={bottomPins} pos={pos} />}
+      {hasPins && (
+        <PinTargets
+          pins={allPins} pos={pos}
+          size={nInputs <= 4 ? 16 : 10}
+          onCtx={onPinContextMenu} pRef={pinRef}
+        />
+      )}
     </svg>
   );
 }
 
-function ExorSvg({ width = 90, height = 90, className }: SvgProps) {
-  const bodyPath = "M 25,10 Q 68,8 88,50 Q 68,92 25,90 Q 37,50 25,10 Z";
+function ExorSvg(props: GateSvgProps) {
+  const {
+    width = 90, height = 90, className,
+    topPins = [], bottomPins = [],
+    onPinContextMenu, pinRef, onBodyContextMenu,
+  } = props;
+  const allPins = [...topPins, ...bottomPins];
+  const hasPins = allPins.length > 0;
+  const pos = hasPins ? buildHorizPins(topPins, bottomPins, 30, 88) : {};
+
   return (
-    <svg width={width} height={height} viewBox="0 0 100 100" className={className}>
-      <path d="M 17,10 Q 29,50 17,90" fill="none" stroke="#333" strokeWidth="5" strokeLinecap="round" />
-      <path d={bodyPath} fill="#999" stroke="#333" strokeWidth="5" />
+    <svg width={width} height={height} viewBox="0 0 100 100" className={className} overflow="visible">
+      {hasPins && <PinStubs pins={topPins} pos={pos} />}
+      <g onContextMenu={onBodyContextMenu}>
+        <path d="M 17,10 Q 29,50 17,90" fill="none" stroke="#333" strokeWidth="5" strokeLinecap="round" />
+        <path
+          d="M 25,10 Q 68,8 88,50 Q 68,92 25,90 Q 37,50 25,10 Z"
+          fill="#999" stroke="#333" strokeWidth="5"
+        />
+      </g>
+      {hasPins && <PinStubs pins={bottomPins} pos={pos} />}
+      {hasPins && (
+        <PinTargets pins={allPins} pos={pos} onCtx={onPinContextMenu} pRef={pinRef} />
+      )}
     </svg>
   );
 }
 
-function ExnorSvg({ width = 90, height = 90, className }: SvgProps) {
-  const bodyPath = "M 22,10 Q 60,8 76,50 Q 60,92 22,90 Q 34,50 22,10 Z";
+function ExnorSvg(props: GateSvgProps) {
+  const {
+    width = 90, height = 90, className,
+    topPins = [], bottomPins = [],
+    onPinContextMenu, pinRef, onBodyContextMenu,
+  } = props;
+  const allPins = [...topPins, ...bottomPins];
+  const hasPins = allPins.length > 0;
+  const pos = hasPins ? buildHorizPins(topPins, bottomPins, 28, 90) : {};
+
   return (
-    <svg width={width} height={height} viewBox="0 0 100 100" className={className}>
-      <path d="M 14,10 Q 26,50 14,90" fill="none" stroke="#333" strokeWidth="5" strokeLinecap="round" />
-      <path d={bodyPath} fill="#999" stroke="#333" strokeWidth="5" />
-      <circle cx="84" cy="50" r="6" fill="#999" stroke="#333" strokeWidth="3.5" />
+    <svg width={width} height={height} viewBox="0 0 100 100" className={className} overflow="visible">
+      {hasPins && <PinStubs pins={topPins} pos={pos} />}
+      <g onContextMenu={onBodyContextMenu}>
+        <path d="M 14,10 Q 26,50 14,90" fill="none" stroke="#333" strokeWidth="5" strokeLinecap="round" />
+        <path
+          d="M 22,10 Q 60,8 76,50 Q 60,92 22,90 Q 34,50 22,10 Z"
+          fill="#999" stroke="#333" strokeWidth="5"
+        />
+        <circle cx="84" cy="50" r="6" fill="#999" stroke="#333" strokeWidth="3.5" />
+      </g>
+      {hasPins && <PinStubs pins={bottomPins} pos={pos} />}
+      {hasPins && (
+        <PinTargets pins={allPins} pos={pos} onCtx={onPinContextMenu} pRef={pinRef} />
+      )}
     </svg>
   );
 }
 
-// ────────────────────────────────────────────────
-//  IC Package SVG (shared by DEMUX, MUX, flip-flops, encoder)
-// ────────────────────────────────────────────────
+// ── IC Package Component ──
 
 interface PinLabel {
   text: string;
@@ -86,20 +344,25 @@ function IcSvg({
   width = 100,
   height = 100,
   className,
+  topPins = [],
+  bottomPins = [],
+  onPinContextMenu,
+  pinRef,
+  onBodyContextMenu,
   topLabels,
   bottomLabels,
-}: SvgProps & { topLabels: PinLabel[]; bottomLabels: PinLabel[] }) {
+}: GateSvgProps & { topLabels: PinLabel[]; bottomLabels: PinLabel[] }) {
   const vb = 200;
   const m = 10;
   const pinH = 30;
   const bodyW = vb - 2 * m;
-  const bodyH = vb - 2 * m;
+
+  const allPins = [...topPins, ...bottomPins];
+  const hasPins = allPins.length > 0;
+  const pos = hasPins ? buildIcPins(topPins, bottomPins, vb, m) : {};
 
   const tCols = topLabels.length;
   const bCols = bottomLabels.length;
-  const tPinW = bodyW / tCols;
-  const bPinW = bodyW / bCols;
-
   const maxCols = Math.max(tCols, bCols);
   const maxLen = Math.max(
     ...topLabels.map((l) => l.text.length),
@@ -108,19 +371,23 @@ function IcSvg({
   const fontSize = Math.min(15, (bodyW / maxCols - 4) / (maxLen * 0.55));
 
   const chipTop = m + pinH + 8;
-  const chipH = bodyH - 2 * pinH - 16;
+  const chipH = bodyW - 2 * pinH - 16;
 
   return (
     <svg
-      width={width}
-      height={height}
+      width={width} height={height}
       viewBox={`0 0 ${vb} ${vb}`}
       className={className}
+      overflow="visible"
     >
+      {/* Pin stubs (drawn under the body so body covers overlap) */}
+      {hasPins && <PinStubs pins={allPins} pos={pos} />}
+
       {/* Body */}
       <rect
-        x={m} y={m} width={bodyW} height={bodyH}
+        x={m} y={m} width={bodyW} height={bodyW}
         rx="6" ry="6" fill="#888" stroke="#333" strokeWidth="4"
+        onContextMenu={onBodyContextMenu}
       />
 
       {/* Inner chip rectangle */}
@@ -136,13 +403,14 @@ function IcSvg({
         fill="#555" stroke="#444" strokeWidth="1.5"
       />
 
-      {/* Top pin labels */}
+      {/* Top labels */}
       {topLabels.map((label, i) => {
+        const tPinW = bodyW / tCols;
         const x = m + i * tPinW;
         const cx = x + tPinW / 2;
         const cy = m + pinH / 2 + 2;
         return (
-          <g key={`t${i}`}>
+          <g key={`tl${i}`}>
             <rect
               x={x + 1} y={m + 1} width={tPinW - 2} height={pinH}
               fill="#777" stroke="#666" strokeWidth="1.5" rx="2"
@@ -167,13 +435,14 @@ function IcSvg({
         );
       })}
 
-      {/* Bottom pin labels */}
+      {/* Bottom labels */}
       {bottomLabels.map((label, i) => {
+        const bPinW = bodyW / bCols;
         const x = m + i * bPinW;
         const cx = x + bPinW / 2;
         const cy = vb - m - pinH / 2;
         return (
-          <g key={`b${i}`}>
+          <g key={`bl${i}`}>
             <rect
               x={x + 1} y={vb - m - pinH - 1} width={bPinW - 2} height={pinH}
               fill="#777" stroke="#666" strokeWidth="1.5" rx="2"
@@ -197,15 +466,21 @@ function IcSvg({
           </g>
         );
       })}
+
+      {/* Pin targets (on top of everything) */}
+      {hasPins && (
+        <PinTargets pins={allPins} pos={pos} onCtx={onPinContextMenu} pRef={pinRef} />
+      )}
     </svg>
   );
 }
 
-// ────────────────────────────────────────────────
-//  IC pin label configurations
-// ────────────────────────────────────────────────
+// ── IC pin label configurations ──
 
-const icConfigs: Record<string, { topLabels: PinLabel[]; bottomLabels: PinLabel[] }> = {
+const icConfigs: Record<
+  string,
+  { topLabels: PinLabel[]; bottomLabels: PinLabel[] }
+> = {
   DEMUXm2: {
     topLabels: [
       { text: "VCC" }, { text: "I0" }, { text: "I1" }, { text: "I2" },
@@ -225,9 +500,7 @@ const icConfigs: Record<string, { topLabels: PinLabel[]; bottomLabels: PinLabel[
     ],
   },
   MUXm1: {
-    topLabels: [
-      { text: "VCC" }, { text: "U0" }, { text: "U1" },
-    ],
+    topLabels: [{ text: "VCC" }, { text: "U0" }, { text: "U1" }],
     bottomLabels: [
       { text: "A0" }, { text: "I" }, { text: "E" }, { text: "GND" },
     ],
@@ -252,7 +525,8 @@ const icConfigs: Record<string, { topLabels: PinLabel[]; bottomLabels: PinLabel[
   },
   DFlipFlop: {
     topLabels: [
-      { text: "VCC" }, { text: "S", overline: true }, { text: "Q" }, { text: "Q", overline: true },
+      { text: "VCC" }, { text: "S", overline: true }, { text: "Q" },
+      { text: "Q", overline: true },
     ],
     bottomLabels: [
       { text: "R", overline: true }, { text: "D" }, { text: "CP" }, { text: "GND" },
@@ -260,10 +534,12 @@ const icConfigs: Record<string, { topLabels: PinLabel[]; bottomLabels: PinLabel[
   },
   JKFlipFlop: {
     topLabels: [
-      { text: "VCC" }, { text: "S", overline: true }, { text: "Q" }, { text: "Q", overline: true },
+      { text: "VCC" }, { text: "S", overline: true }, { text: "Q" },
+      { text: "Q", overline: true },
     ],
     bottomLabels: [
-      { text: "R", overline: true }, { text: "CP" }, { text: "K" }, { text: "J" }, { text: "GND" },
+      { text: "R", overline: true }, { text: "CP" }, { text: "K" },
+      { text: "J" }, { text: "GND" },
     ],
   },
   encoder: {
@@ -278,29 +554,27 @@ const icConfigs: Record<string, { topLabels: PinLabel[]; bottomLabels: PinLabel[
   },
 };
 
-// ────────────────────────────────────────────────
-//  Exported lookup map: element type → SVG component
-// ────────────────────────────────────────────────
+// ── Exported lookup: element type → SVG component ──
 
-export const gateSvgs: Record<string, React.FC<SvgProps>> = {
+export const gateSvgs: Record<string, React.FC<GateSvgProps>> = {
   buffer: BufferSvg,
   NOT: NotSvg,
-  NOR2Inputs: (props) => <NorSvg {...props} inputs={2} />,
-  NOR3Inputs: (props) => <NorSvg {...props} inputs={3} />,
-  NOR4Inputs: (props) => <NorSvg {...props} inputs={4} />,
-  NOR8Inputs: (props) => <NorSvg {...props} inputs={8} />,
+  NOR2Inputs: NorSvg,
+  NOR3Inputs: NorSvg,
+  NOR4Inputs: NorSvg,
+  NOR8Inputs: NorSvg,
   NAND2Inputs: NandSvg,
   NAND3Inputs: NandSvg,
   NAND4Inputs: NandSvg,
   NAND8Inputs: NandSvg,
   EXOR: ExorSvg,
   EXNOR: ExnorSvg,
-  DEMUXm2: (props) => <IcSvg {...props} {...icConfigs.DEMUXm2} />,
-  DEMUXm3: (props) => <IcSvg {...props} {...icConfigs.DEMUXm3} />,
-  MUXm1: (props) => <IcSvg {...props} {...icConfigs.MUXm1} />,
-  MUXm2: (props) => <IcSvg {...props} {...icConfigs.MUXm2} />,
-  MUXm3: (props) => <IcSvg {...props} {...icConfigs.MUXm3} />,
-  DFlipFlop: (props) => <IcSvg {...props} {...icConfigs.DFlipFlop} />,
-  JKFlipFlop: (props) => <IcSvg {...props} {...icConfigs.JKFlipFlop} />,
-  encoder: (props) => <IcSvg {...props} {...icConfigs.encoder} />,
+  DEMUXm2: (p) => <IcSvg {...p} {...icConfigs.DEMUXm2} />,
+  DEMUXm3: (p) => <IcSvg {...p} {...icConfigs.DEMUXm3} />,
+  MUXm1: (p) => <IcSvg {...p} {...icConfigs.MUXm1} />,
+  MUXm2: (p) => <IcSvg {...p} {...icConfigs.MUXm2} />,
+  MUXm3: (p) => <IcSvg {...p} {...icConfigs.MUXm3} />,
+  DFlipFlop: (p) => <IcSvg {...p} {...icConfigs.DFlipFlop} />,
+  JKFlipFlop: (p) => <IcSvg {...p} {...icConfigs.JKFlipFlop} />,
+  encoder: (p) => <IcSvg {...p} {...icConfigs.encoder} />,
 };
