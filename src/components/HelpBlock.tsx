@@ -1,19 +1,5 @@
-import { useState } from "react";
-
-import bufferImage from "./images/buffer.png";
-import NOTImage from "./images/NOT.png";
-import NORImage from "./images/NOR.png";
-import NANDImage from "./images/NAND.png";
-import EXORImage from "./images/EXOR.png";
-import EXNORImage from "./images/EXNOR.png";
-import DEMUXm2Image from "./images/DEMUXm2.png";
-import DEMUXm3Image from "./images/DEMUXm3.png";
-import MUXm1Image from "./images/MUXm1.png";
-import MUXm2Image from "./images/MUXm2.png";
-import MUXm3Image from "./images/MUXm3.png";
-import DFlipFlopImage from "./images/Dflip-flop.png";
-import JKFlipFlopImage from "./images/JKflip-flop.png";
-import encoderImage from "./images/encoder.png";
+import React, { useState } from "react";
+import { gateSvgs } from "./GateSvgs";
 
 const helpPages = [
   // Page 1: Basic Help
@@ -39,17 +25,20 @@ const helpPages = [
       <h2 className="text-xl font-bold text-white mb-3">Basic elements</h2>
       <ul className="text-gray-200 space-y-2">
         {[
-          ["BUFFER", bufferImage],
-          ["NOT", NOTImage],
-          ["NOR(2, 3, 4, 8 inputs)", NORImage],
-          ["NAND(2, 3, 4, 8 inputs)", NANDImage],
-          ["EXOR(2 inputs)", EXORImage],
-          ["EXNOR(2 inputs)", EXNORImage],
-        ].map(([label, img]) => (
-          <li key={label as string} className="flex items-center gap-3">
-            {label} <img src={img as string} alt="" className="w-10 h-10 object-contain" />
-          </li>
-        ))}
+          ["BUFFER", "buffer"],
+          ["NOT", "NOT"],
+          ["NOR(2, 3, 4, 8 inputs)", "NOR2Inputs"],
+          ["NAND(2, 3, 4, 8 inputs)", "NAND2Inputs"],
+          ["EXOR(2 inputs)", "EXOR"],
+          ["EXNOR(2 inputs)", "EXNOR"],
+        ].map(([label, key]) => {
+          const Svg = gateSvgs[key];
+          return (
+            <li key={label} className="flex items-center gap-3">
+              {label} {Svg && <Svg width={40} height={40} />}
+            </li>
+          );
+        })}
       </ul>
       <p className="text-gray-300 mt-3">
         In order for those components to work properly all input pins need to be connected.
@@ -72,8 +61,8 @@ const helpPages = [
         <div className="space-y-2">
           <p>-outputs (I0-I7) are inverted and serve as connections to other elements</p>
           <div className="flex gap-3 mt-3">
-            <img src={DEMUXm2Image} alt="DEMUX m=2" className="w-20 h-20 object-contain" />
-            <img src={DEMUXm3Image} alt="DEMUX m=3" className="w-20 h-20 object-contain" />
+            {React.createElement(gateSvgs.DEMUXm2, { width: 80, height: 80 })}
+            {React.createElement(gateSvgs.DEMUXm3, { width: 80, height: 80 })}
           </div>
         </div>
       </div>
@@ -96,9 +85,9 @@ const helpPages = [
           <p>-inputs (U0-U7) serve as data inputs</p>
           <p>-output I and inverted I serve as connections to other elements</p>
           <div className="flex gap-2 mt-3">
-            <img src={MUXm1Image} alt="MUX m=1" className="w-16 h-16 object-contain" />
-            <img src={MUXm2Image} alt="MUX m=2" className="w-16 h-16 object-contain" />
-            <img src={MUXm3Image} alt="MUX m=3" className="w-16 h-16 object-contain" />
+            {React.createElement(gateSvgs.MUXm1, { width: 64, height: 64 })}
+            {React.createElement(gateSvgs.MUXm2, { width: 64, height: 64 })}
+            {React.createElement(gateSvgs.MUXm3, { width: 64, height: 64 })}
           </div>
         </div>
       </div>
@@ -122,7 +111,7 @@ const helpPages = [
           <p>-input S forces Q = 1 when 0</p>
           <p>-outputs Q and inverted Q serve as connections to other elements</p>
           <div className="flex justify-center mt-3">
-            <img src={DFlipFlopImage} alt="D Flip-Flop" className="w-24 h-24 object-contain" />
+            {React.createElement(gateSvgs.DFlipFlop, { width: 96, height: 96 })}
           </div>
         </div>
       </div>
@@ -147,7 +136,7 @@ const helpPages = [
           <p>-input S forces Q = 1 when 0</p>
           <p>-outputs Q and inverted Q serve as connections to other elements</p>
           <div className="flex justify-center mt-3">
-            <img src={JKFlipFlopImage} alt="JK Flip-Flop" className="w-24 h-24 object-contain" />
+            {React.createElement(gateSvgs.JKFlipFlop, { width: 96, height: 96 })}
           </div>
         </div>
       </div>
@@ -171,7 +160,7 @@ const helpPages = [
           <p>-output EI is used for cascading multiple encoders</p>
           <p>-outputs (I0-I2) serve as connections to other elements</p>
           <div className="flex justify-center mt-3">
-            <img src={encoderImage} alt="Priority Encoder" className="w-24 h-24 object-contain" />
+            {React.createElement(gateSvgs.encoder, { width: 96, height: 96 })}
           </div>
         </div>
       </div>

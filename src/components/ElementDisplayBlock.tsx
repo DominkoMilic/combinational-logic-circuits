@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { createElementDisplayNameFromId, findImagePath } from "../utils/controlPanel";
+import { createElementDisplayNameFromId, findElementSvgKey } from "../utils/controlPanel";
+import { gateSvgs } from "./GateSvgs";
 import type { SelectedElement } from "../types";
 
 interface ElementDisplayBlockProps {
@@ -8,17 +9,17 @@ interface ElementDisplayBlockProps {
 
 function ElementDisplayBlock({ newElement1 }: ElementDisplayBlockProps) {
   const [elementNameDisplay, setElementNameDisplay] = useState<string | null>(null);
-  const [imagePath, setImagePath] = useState<string | null>(null);
+  const [svgKey, setSvgKey] = useState<string | null>(null);
   const [elementIODisplay, setElementIODisplay] = useState<string | null>(null);
 
   useEffect(() => {
     if (!newElement1) {
       setElementNameDisplay(null);
       setElementIODisplay(null);
-      setImagePath(null);
+      setSvgKey(null);
     } else {
       const name = createElementDisplayNameFromId(newElement1.id);
-      setImagePath(findImagePath(name[0]));
+      setSvgKey(findElementSvgKey(name[0]));
       setElementNameDisplay(name[0]);
       setElementIODisplay(name[1]);
     }
@@ -51,7 +52,7 @@ function ElementDisplayBlock({ newElement1 }: ElementDisplayBlockProps) {
         </p>
       </div>
       <div className="h-10 w-10 shrink-0">
-        {imagePath && <img src={imagePath} alt="" className="w-full h-full object-contain" />}
+        {svgKey && gateSvgs[svgKey] && (() => { const Svg = gateSvgs[svgKey]; return <Svg width={40} height={40} />; })()}
       </div>
     </div>
   );

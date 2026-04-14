@@ -1,7 +1,7 @@
 import { useRef, useEffect, useCallback } from "react";
 import Draggable from "react-draggable";
 import type { CircuitElement as CircuitElementType, CircuitElementConfig, PinConfig } from "../types";
-import { circuitImages } from "../config/circuitElements";
+import { gateSvgs } from "./GateSvgs";
 
 interface CircuitElementProps {
   config: CircuitElementConfig;
@@ -107,7 +107,7 @@ function CircuitElement({
     </div>
   );
 
-  const imageSrc = circuitImages[config.name];
+  const GateSvgComponent = gateSvgs[config.name];
 
   if (config.layout === "horizontal") {
     return (
@@ -139,14 +139,13 @@ function CircuitElement({
 
             {/* Element image */}
             <div
-              className="bg-contain bg-center bg-no-repeat"
-              style={{
-                width: config.imageWidth,
-                height: config.imageHeight,
-                backgroundImage: `url(${imageSrc})`,
-              }}
+              style={{ width: config.imageWidth, height: config.imageHeight }}
               onContextMenu={handleDeleteClick}
-            />
+            >
+              {GateSvgComponent && (
+                <GateSvgComponent width={config.imageWidth} height={config.imageHeight} />
+              )}
+            </div>
 
             {/* Output pins column */}
             <div
@@ -194,14 +193,14 @@ function CircuitElement({
 
           {/* Element image */}
           <div
-            className="bg-contain bg-center bg-no-repeat flex"
-            style={{
-              width: config.imageWidth,
-              height: config.imageHeight,
-              backgroundImage: `url(${imageSrc})`,
-            }}
+            className="flex"
+            style={{ width: config.imageWidth, height: config.imageHeight }}
             onContextMenu={handleDeleteClick}
-          />
+          >
+            {GateSvgComponent && (
+              <GateSvgComponent width={config.imageWidth} height={config.imageHeight} />
+            )}
+          </div>
 
           {/* Bottom pin row */}
           <div

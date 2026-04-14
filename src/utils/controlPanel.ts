@@ -1,5 +1,3 @@
-import { circuitImages } from "../config/circuitElements";
-
 const wireNameMaps: Record<string, Record<string, string>> = {
   MUXm1: {
     input6: "VCC", input5: "GND", input4: "U1", input3: "U0",
@@ -82,7 +80,9 @@ export const createElementDisplayNameFromId = (elementId: string): [string, stri
   return [elementName, elementWire];
 };
 
-export const findImagePath = (elementName: string): string | null => {
+export const findElementSvgKey = (elementName: string): string | null => {
   const nameToCheck = elementName.replace(/^!/, "").split("-")[0];
-  return circuitImages[nameToCheck] || null;
+  // Map PriorityEncoder back to "encoder" key used by gateSvgs
+  if (nameToCheck === "PriorityEncoder") return "encoder";
+  return nameToCheck || null;
 };

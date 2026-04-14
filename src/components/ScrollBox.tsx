@@ -1,5 +1,5 @@
-import { useRef } from "react";
-import { circuitImages } from "../config/circuitElements";
+import React, { useRef } from "react";
+import { gateSvgs } from "./GateSvgs";
 import type { CircuitElement, SetFunctions } from "../types";
 
 interface ScrollBoxProps {
@@ -96,11 +96,7 @@ function ScrollBox({ setFunctions }: ScrollBoxProps) {
             className="flex flex-col items-center p-1.5 bg-slate-600 hover:bg-slate-500
                        text-white text-xs rounded cursor-pointer border-none w-full transition-colors"
           >
-            <img
-              src={circuitImages[key]}
-              alt={label}
-              className="w-10 h-10 object-contain"
-            />
+            {gateSvgs[key] && React.createElement(gateSvgs[key], { width: 40, height: 40 })}
             {label}
           </button>
         ))}

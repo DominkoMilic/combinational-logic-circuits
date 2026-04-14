@@ -1,46 +1,5 @@
 import type { CircuitElementConfig, PinConfig } from "../types";
 
-import bufferImage from "../components/images/buffer.png";
-import NOTImage from "../components/images/NOT.png";
-import NANDImage from "../components/images/NAND.png";
-import NOR2IImage from "../components/images/NOR2I.png";
-import NOR3IImage from "../components/images/NOR3I.png";
-import NOR4IImage from "../components/images/NOR4I.png";
-import NOR8IImage from "../components/images/NOR8I.png";
-import EXORImage from "../components/images/EXOR.png";
-import EXNORImage from "../components/images/EXNOR.png";
-import MUXm1Image from "../components/images/MUXm1.png";
-import MUXm2Image from "../components/images/MUXm2.png";
-import MUXm3Image from "../components/images/MUXm3.png";
-import DEMUXm2Image from "../components/images/DEMUXm2.png";
-import DEMUXm3Image from "../components/images/DEMUXm3.png";
-import DFlipFlopImage from "../components/images/Dflip-flop.png";
-import JKFlipFlopImage from "../components/images/JKflip-flop.png";
-import encoderImage from "../components/images/encoder.png";
-
-export const circuitImages: Record<string, string> = {
-  buffer: bufferImage,
-  NOT: NOTImage,
-  EXOR: EXORImage,
-  EXNOR: EXNORImage,
-  NOR2Inputs: NOR2IImage,
-  NOR3Inputs: NOR3IImage,
-  NOR4Inputs: NOR4IImage,
-  NOR8Inputs: NOR8IImage,
-  NAND2Inputs: NANDImage,
-  NAND3Inputs: NANDImage,
-  NAND4Inputs: NANDImage,
-  NAND8Inputs: NANDImage,
-  MUXm1: MUXm1Image,
-  MUXm2: MUXm2Image,
-  MUXm3: MUXm3Image,
-  DEMUXm2: DEMUXm2Image,
-  DEMUXm3: DEMUXm3Image,
-  DFlipFlop: DFlipFlopImage,
-  JKFlipFlop: JKFlipFlopImage,
-  encoder: encoderImage,
-};
-
 function inputPin(refIndex: number, refId: string, inputNumber = 1): PinConfig {
   return { refIndex, refId, cableOption: 0, inputNumber };
 }
