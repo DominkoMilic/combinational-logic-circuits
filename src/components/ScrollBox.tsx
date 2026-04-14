@@ -7,6 +7,8 @@ interface ScrollBoxProps {
 }
 
 const components = [
+  { key: "Const0", label: "Constant 0" },
+  { key: "Const1", label: "Constant 1" },
   { key: "buffer", label: "Buffer" },
   { key: "NOT", label: "NOT" },
   { key: "NOR2Inputs", label: "NOR 2 inputs" },
@@ -27,12 +29,12 @@ const components = [
   { key: "encoder", label: "Priority encoder" },
   { key: "DFlipFlop", label: "D flip-flop", hasFlipFlopState: true },
   { key: "JKFlipFlop", label: "JK flip-flop", hasFlipFlopState: true },
-  { key: "Const0", label: "Constant 0" },
-  { key: "Const1", label: "Constant 1" },
 ];
 
 // Maps component key -> the setter function key in setFunctions
 const keyToSetterName: Record<string, string> = {
+  Const0: "setConst0Elements",
+  Const1: "setConst1Elements",
   NOT: "setNotElements",
   buffer: "setBufferElements",
   NOR2Inputs: "setNor2InputsElements",
@@ -53,8 +55,6 @@ const keyToSetterName: Record<string, string> = {
   encoder: "setEncoderElements",
   DFlipFlop: "setDFlipFlopElements",
   JKFlipFlop: "setJkFlipFlopElements",
-  Const0: "setConst0Elements",
-  Const1: "setConst1Elements",
 };
 
 // The element type ID used in the circuit (may differ from config key for encoder)
@@ -101,7 +101,8 @@ function ScrollBox({ setFunctions }: ScrollBoxProps) {
                        text-gray-200 text-xs rounded cursor-pointer border border-gray-700 hover:border-gray-600
                        w-full transition-colors"
           >
-            {gateSvgs[key] && React.createElement(gateSvgs[key], { width: 40, height: 40 })}
+            {gateSvgs[key] &&
+              React.createElement(gateSvgs[key], { width: 40, height: 40 })}
             {label}
           </button>
         ))}
