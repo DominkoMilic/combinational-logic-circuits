@@ -104,22 +104,23 @@ function BulbsAndButtons({
   }, [onLoad]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="flex flex-col justify-between h-full py-1">
-      {xButtons.map((button) => (
-        <div key={button.id} className="flex items-center gap-1 px-0.5">
+    <div className="flex flex-col h-full">
+      {xButtons.map((button, index) => (
+        <div key={button.id} className={`flex items-center px-0.5 py-[2px] flex-1
+                      hover:bg-gray-700 transition-colors ${index % 2 === 0 ? "bg-gray-900" : "bg-gray-800"}`}>
           <LeftSideIndicator handleBulbButtonClick={handleBulbButtonClick} button={button} />
-          <div className="flex flex-col gap-0.5 ml-auto">
+          <div className="flex flex-col ml-auto h-full">
             <div
-              className="text-[10px] text-gray-100 font-mono cursor-pointer select-none
-                         bg-gray-700 px-1 rounded hover:bg-gray-600 transition-colors border border-gray-600"
+              className="flex-1 flex items-center text-[10px] text-gray-100 font-mono cursor-pointer select-none
+                         bg-gray-700 px-2 rounded-t hover:bg-gray-600 transition-colors border border-gray-600"
               ref={(el) => { elementRefs.current[button.id] = el; }}
               onContextMenu={(e) => { e.preventDefault(); handleDivClick(button, e); }}
             >
               {button.id.split("-")[0] + button.id.split("-")[1]}
             </div>
             <div
-              className="text-[10px] text-gray-100 font-mono cursor-pointer select-none
-                         bg-gray-800 px-1 rounded hover:bg-gray-700 transition-colors border border-gray-600 overline"
+              className="flex-1 flex items-center text-[10px] text-gray-100 font-mono cursor-pointer select-none
+                         bg-gray-800 px-2 rounded-b hover:bg-gray-700 transition-colors border border-t-0 border-gray-600 overline"
               ref={(el) => { elementRefs.current[`${button.id}-NOTX`] = el; }}
               onContextMenu={(e) => { e.preventDefault(); handleNotDivClick(button, e); }}
             >
@@ -129,7 +130,7 @@ function BulbsAndButtons({
         </div>
       ))}
 
-      <div className="flex gap-1 px-1 mt-1 justify-end">
+      <div className="flex gap-1 px-1 py-1 justify-end bg-gray-900">
         <div
           className="text-[10px] text-white font-mono cursor-pointer select-none
                      bg-rose-700 px-1.5 py-0.5 rounded hover:bg-rose-600 transition-colors"

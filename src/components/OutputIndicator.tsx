@@ -48,11 +48,11 @@ function OutputIndicator({
   }, [onLoad]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="flex flex-col h-full py-0.5">
+    <div className="flex flex-col h-full">
       {yDiv.map((div, index) => (
         <div
           key={div.id}
-          className={`flex items-center gap-1.5 px-1.5 py-[3px] cursor-pointer select-none text-[11px] text-white font-mono
+          className={`flex items-center gap-1 px-1.5 flex-1 cursor-pointer select-none text-[10px] text-white font-mono whitespace-nowrap
                       hover:bg-gray-700 transition-colors ${index % 2 === 0 ? "bg-gray-900" : "bg-gray-800"}`}
           ref={(el) => { elementRefs.current[div.id] = el; }}
           onContextMenu={(e) => {
@@ -62,7 +62,7 @@ function OutputIndicator({
           style={{ justifyContent: isSmallScreen ? "center" : undefined }}
         >
           <div
-            className={`w-3 h-3 rounded-full shrink-0 transition-colors ${
+            className={`w-2.5 h-2.5 rounded-full shrink-0 transition-colors ${
               div.value === "1" ? "bg-emerald-400 shadow-sm shadow-emerald-400/60" : "bg-rose-500"
             }`}
           />
