@@ -45,11 +45,12 @@ function ControlPanelBulbs({ setXVariableValues, xVariableValues }: ControlPanel
           .map((item) => (
             <div key={item.id} className="flex flex-col items-center gap-1">
               <div
-                className="w-4 h-4 rounded-full"
-                style={{ backgroundColor: item.value === "1" ? "green" : "red" }}
+                className={`w-4 h-4 rounded-full transition-colors ${
+                  item.value === "1" ? "bg-emerald-400 shadow-sm shadow-emerald-400/60" : "bg-rose-500"
+                }`}
               />
               <button
-                className="w-5 h-5 bg-slate-500 hover:bg-slate-400 rounded cursor-pointer
+                className="w-5 h-5 bg-gray-600 hover:bg-gray-500 rounded cursor-pointer
                            border-none transition-colors"
                 onClick={() => handleBulbButtonClick(item)}
               />

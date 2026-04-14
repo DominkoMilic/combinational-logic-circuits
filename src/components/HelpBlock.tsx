@@ -11,10 +11,10 @@ const helpPages = [
         <li><strong>Delete an element:</strong> Right-click on an element to open delete option.</li>
         <li><strong>Drag and drop:</strong> Move elements freely by holding and dragging them.</li>
         <li><strong>Add a cable:</strong> Right-click on a pin to start connecting elements with cables. Right click on it for editing.</li>
-        <li><strong>Clear all:</strong> Use the <span className="bg-slate-600 px-1 rounded text-sm">CLEAR</span> button to remove all elements from the workspace.</li>
-        <li><strong>Reset generator:</strong> Press the <span className="bg-slate-600 px-1 rounded text-sm">RESET</span> button to reset the generator.</li>
-        <li><strong>Increment generator:</strong> Click the <span className="bg-slate-600 px-1 rounded text-sm">CP</span> button to increment the generator by binary 1.</li>
-        <li><strong>Reset Selected Element:</strong> Click the <span className="bg-slate-600 px-1 rounded text-sm">RESET SELECTED ELEMENT</span> button to clear previously selected pin.</li>
+        <li><strong>Clear all:</strong> Use the <span className="bg-gray-700 px-1 rounded text-sm">CLEAR</span> button to remove all elements from the workspace.</li>
+        <li><strong>Reset generator:</strong> Press the <span className="bg-gray-700 px-1 rounded text-sm">RESET</span> button to reset the generator.</li>
+        <li><strong>Increment generator:</strong> Click the <span className="bg-gray-700 px-1 rounded text-sm">CP</span> button to increment the generator by binary 1.</li>
+        <li><strong>Reset Selected Element:</strong> Click the <span className="bg-gray-700 px-1 rounded text-sm">RESET SELECTED ELEMENT</span> button to clear previously selected pin.</li>
       </ul>
     </div>
   ),
@@ -176,30 +176,41 @@ function HelpBlock() {
   const Page = helpPages[pageNumber];
 
   return (
-    <div className="relative h-full">
-      <Page />
+    <div className="flex flex-col h-full">
+      <div className="flex-1 px-10">
+        <Page />
+      </div>
 
-      {/* Navigation buttons */}
-      {!isLastPage && (
-        <button
-          className="absolute right-2 top-1/2 -translate-y-1/2 bg-slate-600 hover:bg-slate-500
-                     text-white w-8 h-8 rounded-full flex items-center justify-center
-                     cursor-pointer border-none transition-colors text-lg"
-          onClick={() => setPageNumber((p) => Math.min(p + 1, helpPages.length - 1))}
-        >
-          &gt;
-        </button>
-      )}
-      {!isFirstPage && (
-        <button
-          className="absolute left-2 top-1/2 -translate-y-1/2 bg-slate-600 hover:bg-slate-500
-                     text-white w-8 h-8 rounded-full flex items-center justify-center
-                     cursor-pointer border-none transition-colors text-lg"
-          onClick={() => setPageNumber((p) => Math.max(p - 1, 0))}
-        >
-          &lt;
-        </button>
-      )}
+      {/* Navigation bar */}
+      <div className="flex items-center justify-between px-4 pb-3">
+        <div className="w-8">
+          {!isFirstPage && (
+            <button
+              className="bg-indigo-600 hover:bg-indigo-500
+                         text-white w-8 h-8 rounded-full flex items-center justify-center
+                         cursor-pointer border-none transition-colors text-lg shadow-md"
+              onClick={() => setPageNumber((p) => Math.max(p - 1, 0))}
+            >
+              &lt;
+            </button>
+          )}
+        </div>
+        <span className="text-gray-400 text-xs">
+          {pageNumber + 1} / {helpPages.length}
+        </span>
+        <div className="w-8">
+          {!isLastPage && (
+            <button
+              className="bg-indigo-600 hover:bg-indigo-500
+                         text-white w-8 h-8 rounded-full flex items-center justify-center
+                         cursor-pointer border-none transition-colors text-lg shadow-md"
+              onClick={() => setPageNumber((p) => Math.min(p + 1, helpPages.length - 1))}
+            >
+              &gt;
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

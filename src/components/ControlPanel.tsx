@@ -37,7 +37,7 @@ function ControlPanel({
   setPinIndicatorPosition,
 }: ControlPanelProps) {
   return (
-    <div className="flex items-center h-full bg-gray-500 px-2 gap-3">
+    <div className="flex items-center h-full bg-gray-800 px-2 gap-3">
       {/* Bulb indicators */}
       <div className="shrink-0">
         <ControlPanelBulbs
@@ -75,18 +75,18 @@ function ControlPanel({
       {/* Info/Help buttons */}
       <div className="flex gap-2 shrink-0">
         <button
-          className="bg-slate-600 hover:bg-slate-500 text-white w-8 h-8 rounded-full
+          className="bg-indigo-600 hover:bg-indigo-500 text-white w-8 h-8 rounded-full
                      flex items-center justify-center cursor-pointer border-none transition-colors
-                     text-sm font-bold"
+                     text-sm font-bold shadow-md"
           onClick={() => { setIsInfoVisible(true); setIsHelp(false); }}
           title="Info"
         >
           i
         </button>
         <button
-          className="bg-slate-600 hover:bg-slate-500 text-white w-8 h-8 rounded-full
+          className="bg-indigo-600 hover:bg-indigo-500 text-white w-8 h-8 rounded-full
                      flex items-center justify-center cursor-pointer border-none transition-colors
-                     text-sm font-bold"
+                     text-sm font-bold shadow-md"
           onClick={() => { setIsInfoVisible(true); setIsHelp(true); }}
           title="Help"
         >

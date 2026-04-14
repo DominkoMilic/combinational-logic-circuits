@@ -93,8 +93,9 @@ function ScrollBox({ setFunctions }: ScrollBoxProps) {
           <button
             key={key}
             onClick={() => handleAddElement(key, hasFlipFlopState)}
-            className="flex flex-col items-center p-1.5 bg-slate-600 hover:bg-slate-500
-                       text-white text-xs rounded cursor-pointer border-none w-full transition-colors"
+            className="flex flex-col items-center p-1.5 bg-gray-800 hover:bg-gray-700
+                       text-gray-200 text-xs rounded cursor-pointer border border-gray-700 hover:border-gray-600
+                       w-full transition-colors"
           >
             {gateSvgs[key] && React.createElement(gateSvgs[key], { width: 40, height: 40 })}
             {label}

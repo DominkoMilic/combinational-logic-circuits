@@ -35,7 +35,7 @@ function ControlPanelButtons({
   const [loadOptionVisibility, setLoadOptionVisibility] = useState(false);
 
   const btnClass =
-    "bg-slate-600 hover:bg-slate-500 text-white text-xs px-3 py-1.5 rounded cursor-pointer border-none transition-colors";
+    "bg-gray-700 hover:bg-gray-600 text-gray-100 text-xs px-3 py-1.5 rounded cursor-pointer border border-gray-600 transition-colors";
 
   return (
     <div className="flex items-center gap-2 h-full px-2">

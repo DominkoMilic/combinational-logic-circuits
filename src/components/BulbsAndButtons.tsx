@@ -108,18 +108,18 @@ function BulbsAndButtons({
       {xButtons.map((button) => (
         <div key={button.id} className="flex items-center gap-1 px-0.5">
           <LeftSideIndicator handleBulbButtonClick={handleBulbButtonClick} button={button} />
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col gap-0.5 ml-auto">
             <div
-              className="text-[10px] text-white font-mono cursor-pointer select-none
-                         bg-slate-600 px-1 rounded hover:bg-slate-500 transition-colors"
+              className="text-[10px] text-gray-100 font-mono cursor-pointer select-none
+                         bg-gray-700 px-1 rounded hover:bg-gray-600 transition-colors border border-gray-600"
               ref={(el) => { elementRefs.current[button.id] = el; }}
               onContextMenu={(e) => { e.preventDefault(); handleDivClick(button, e); }}
             >
               {button.id.split("-")[0] + button.id.split("-")[1]}
             </div>
             <div
-              className="text-[10px] text-white font-mono cursor-pointer select-none
-                         bg-slate-700 px-1 rounded hover:bg-slate-600 transition-colors overline"
+              className="text-[10px] text-gray-100 font-mono cursor-pointer select-none
+                         bg-gray-800 px-1 rounded hover:bg-gray-700 transition-colors border border-gray-600 overline"
               ref={(el) => { elementRefs.current[`${button.id}-NOTX`] = el; }}
               onContextMenu={(e) => { e.preventDefault(); handleNotDivClick(button, e); }}
             >
@@ -129,10 +129,10 @@ function BulbsAndButtons({
         </div>
       ))}
 
-      <div className="flex gap-1 px-1 mt-1">
+      <div className="flex gap-1 px-1 mt-1 justify-end">
         <div
           className="text-[10px] text-white font-mono cursor-pointer select-none
-                     bg-red-800 px-1.5 py-0.5 rounded hover:bg-red-700 transition-colors"
+                     bg-rose-700 px-1.5 py-0.5 rounded hover:bg-rose-600 transition-colors"
           ref={(el) => { elementRefs.current["X-8-constant"] = el; }}
           onContextMenu={(e) => { e.preventDefault(); handleDivClick(constantX[0], e); }}
         >
@@ -140,7 +140,7 @@ function BulbsAndButtons({
         </div>
         <div
           className="text-[10px] text-white font-mono cursor-pointer select-none
-                     bg-green-800 px-1.5 py-0.5 rounded hover:bg-green-700 transition-colors"
+                     bg-emerald-700 px-1.5 py-0.5 rounded hover:bg-emerald-600 transition-colors"
           ref={(el) => { elementRefs.current["X-9-constant"] = el; }}
           onContextMenu={(e) => { e.preventDefault(); handleDivClick(constantX[1], e); }}
         >

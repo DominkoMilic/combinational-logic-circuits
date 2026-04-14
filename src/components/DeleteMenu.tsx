@@ -82,7 +82,7 @@ function DeleteMenu({
   };
 
   const btnClass =
-    "bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 text-sm rounded cursor-pointer border border-slate-500 transition-colors w-full";
+    "bg-gray-800 hover:bg-gray-700 text-gray-100 px-3 py-1.5 text-sm rounded cursor-pointer border border-gray-600 transition-colors w-full shadow-lg";
 
   return (
     <div className="absolute z-50 flex flex-col gap-1" style={{ top: menuTop, left: menuLeft }}>

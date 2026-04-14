@@ -23,19 +23,19 @@ function ColorSelection({
   };
 
   return (
-    <div className="flex flex-col items-center bg-slate-800 rounded p-2 mt-1">
+    <div className="flex flex-col items-center bg-gray-900 rounded-lg p-2 mt-1 border border-gray-700 shadow-lg">
       <ColorWheel selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
       <div className="flex gap-2 mt-2">
         <button
-          className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 text-sm rounded
-                     cursor-pointer border border-slate-500 transition-colors"
+          className="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1 text-sm rounded
+                     cursor-pointer border-none transition-colors"
           onClick={handleApplyColor}
         >
           APPLY
         </button>
         <button
-          className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 text-sm rounded
-                     cursor-pointer border border-slate-500 transition-colors"
+          className="bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1 text-sm rounded
+                     cursor-pointer border border-gray-600 transition-colors"
           onClick={() => setIsColorWheelVisible(false)}
         >
           CANCEL

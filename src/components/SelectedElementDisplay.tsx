@@ -22,8 +22,8 @@ function SelectedElementDisplay({
       <ElementDisplayBlock newElement1={newElement1} />
       <button
         onClick={resetSelectedElement}
-        className="bg-slate-600 hover:bg-slate-500 text-white text-[10px] px-2 py-1
-                   rounded cursor-pointer border-none transition-colors whitespace-nowrap"
+        className="bg-gray-700 hover:bg-gray-600 text-gray-100 text-[10px] px-2 py-1
+                   rounded cursor-pointer border border-gray-600 transition-colors whitespace-nowrap"
       >
         RESET SELECTED ELEMENT
       </button>

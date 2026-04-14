@@ -33,7 +33,7 @@ function LoadOption({
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100]">
-      <div className="bg-slate-800 rounded-lg p-6 max-w-3xl w-full mx-4">
+      <div className="bg-gray-900 rounded-xl p-6 max-w-3xl w-full mx-4 border border-gray-700 shadow-2xl">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6">
           {premadeCircuits.map((circuit, index) => (
             <PremadeOption
@@ -48,15 +48,15 @@ function LoadOption({
         <div className="flex justify-center gap-3">
           <button
             onClick={() => handleLoadFromPC(null)}
-            className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded
-                       cursor-pointer border-none transition-colors"
+            className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded
+                       cursor-pointer border-none transition-colors shadow-md"
           >
             UPLOAD FILE
           </button>
           <button
             onClick={() => setLoadOptionVisibility(false)}
-            className="bg-slate-600 hover:bg-slate-500 text-white px-4 py-2 rounded
-                       cursor-pointer border-none transition-colors"
+            className="bg-gray-700 hover:bg-gray-600 text-gray-200 px-4 py-2 rounded
+                       cursor-pointer border border-gray-600 transition-colors"
           >
             CANCEL
           </button>

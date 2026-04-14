@@ -61,8 +61,9 @@ function OutputIndicator({
           style={{ justifyContent: isSmallScreen ? "center" : undefined }}
         >
           <div
-            className="w-2.5 h-2.5 rounded-full shrink-0"
-            style={{ backgroundColor: div.value === "1" ? "green" : "red" }}
+            className={`w-2.5 h-2.5 rounded-full shrink-0 transition-colors ${
+              div.value === "1" ? "bg-emerald-400 shadow-sm shadow-emerald-400/60" : "bg-rose-500"
+            }`}
           />
           {!isSmallScreen && div.id}
         </div>

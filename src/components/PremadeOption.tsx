@@ -8,8 +8,8 @@ interface PremadeOptionProps {
 function PremadeOption({ image, title, file, handleLoadFromPC }: PremadeOptionProps) {
   return (
     <div
-      className="flex flex-col items-center gap-2 p-3 bg-slate-700 hover:bg-slate-600
-                 rounded cursor-pointer transition-colors border border-slate-500"
+      className="flex flex-col items-center gap-2 p-3 bg-gray-800 hover:bg-gray-700
+                 rounded-lg cursor-pointer transition-colors border border-gray-700 hover:border-gray-600"
       onClick={() => handleLoadFromPC(file)}
     >
       <img src={image} alt={title} className="w-24 h-24 object-contain rounded" />

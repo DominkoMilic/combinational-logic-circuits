@@ -100,8 +100,8 @@ function SelectionMenu({
       style={{ top: position.top, left: position.left }}
     >
       <button
-        className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5
-                   text-sm rounded cursor-pointer border border-slate-500 transition-colors"
+        className="bg-gray-800 hover:bg-gray-700 text-gray-100 px-3 py-1.5
+                   text-sm rounded cursor-pointer border border-gray-600 transition-colors shadow-lg"
         onClick={() => handleAddCable(cableOption === 0)}
       >
         {cableOption === 0 ? "ADD INPUT CABLE" : "ADD OUTPUT CABLE"}

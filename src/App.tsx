@@ -318,7 +318,7 @@ function App() {
         onClick={handleMainPartClick}
       >
         {/* Left side - X inputs */}
-        <div className="flex flex-col justify-between bg-slate-500 h-full w-[5%] z-[5]">
+        <div className="flex flex-col justify-between bg-gray-900 h-full w-[5%] z-[5]">
           <BulbsAndButtons
             setXVariableValues={setXVariableValues}
             xVariableValues={xVariableValues}
@@ -330,7 +330,8 @@ function App() {
         </div>
 
         {/* Center - Draggable area */}
-        <div className="draggable-area bg-gray-100 h-full w-[80%] relative">
+        <div className="draggable-area bg-gray-50 h-full w-[80%] relative"
+             style={{ backgroundImage: "radial-gradient(circle, #d1d5db 1px, transparent 1px)", backgroundSize: "20px 20px" }}>
           <Gates
             elements={elements}
             handleElementClick={handleElementClick}
@@ -342,7 +343,7 @@ function App() {
 
         {/* Right side - Y outputs + element palette */}
         <div className="flex h-full w-[15%]">
-          <div className="flex flex-col justify-between bg-slate-500 h-full w-[30%] z-[5]">
+          <div className="flex flex-col justify-between bg-gray-900 h-full w-[30%] z-[5]">
             <OutputIndicator
               yVariableValues={yVariableValues}
               handleElementClick={handleElementClick}
@@ -350,14 +351,14 @@ function App() {
               setCables={setCables}
             />
           </div>
-          <div className="flex items-center h-full w-full bg-slate-500">
+          <div className="flex items-center h-full w-full bg-gray-900 border-l border-gray-700">
             <ScrollBox setFunctions={setFunctions} />
           </div>
         </div>
       </div>
 
       {/* Bottom control panel */}
-      <div className="h-[12vh] w-full">
+      <div className="h-[12vh] w-full border-t border-gray-700">
         <ControlPanel
           setXVariableValues={setXVariableValues}
           xVariableValues={xVariableValues}
@@ -425,7 +426,7 @@ function App() {
 
       {pinIndicatorPosition.top != null && pinIndicatorPosition.left != null && (
         <div
-          className="absolute w-5 h-5 bg-lime-400 rounded-[30%] z-0"
+          className="absolute w-5 h-5 bg-emerald-400 rounded-[30%] z-0 shadow-lg shadow-emerald-400/50"
           style={{
             top: pinIndicatorPosition.top,
             left: pinIndicatorPosition.left,
