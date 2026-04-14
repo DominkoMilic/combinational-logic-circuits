@@ -26,11 +26,16 @@ let fullJKFlipFlopElements: CircuitElement[] = [];
 export const updateCablesAndElements = (cables: Cable[], xVariableValues: string[]) => {
   return cables.map((cable) => {
     let newElement1: CableEndpoint;
-    if (cable.element1.id.split("-")[0] === "X") {
+    const prefix = cable.element1.id.split("-")[0];
+    if (prefix === "X") {
       const idx = cable.element1.id.split("-")[1];
       if (idx === "8") newElement1 = { ...cable.element1, value: "0" };
       else if (idx === "9") newElement1 = { ...cable.element1, value: "1" };
       else newElement1 = { ...cable.element1, value: xVariableValues[parseInt(idx)] };
+    } else if (prefix === "Const0") {
+      newElement1 = { ...cable.element1, value: "0" };
+    } else if (prefix === "Const1") {
+      newElement1 = { ...cable.element1, value: "1" };
     } else {
       newElement1 = { ...cable.element1 };
     }
@@ -63,9 +68,8 @@ const findPath = (cables: { element1: CableEndpoint; element2: CableEndpoint }[]
     const cableId = cable.element2.id.split("-")[0] + "-" + cable.element2.id.split("-")[1];
     if (cableId === idToCheck) {
       path.push({ ...cable.element2, calculatedValue: undefined });
-      if (cable.element1.id.split("-")[0] !== "X") {
-        findPath(cables, path, cable.element1.id);
-      } else {
+      const prefix = cable.element1.id.split("-")[0];
+      if (prefix === "X") {
         const isNot = cable.element1.id.split("-")[2] === "NOTX";
         path.push({
           ...cable.element1,
@@ -73,6 +77,12 @@ const findPath = (cables: { element1: CableEndpoint; element2: CableEndpoint }[]
             ? (cable.element1.value === "1" ? "0" : "1")
             : (cable.element1.value === "1" ? "1" : "0"),
         });
+      } else if (prefix === "Const0") {
+        path.push({ ...cable.element1, calculatedValue: "0" });
+      } else if (prefix === "Const1") {
+        path.push({ ...cable.element1, calculatedValue: "1" });
+      } else {
+        findPath(cables, path, cable.element1.id);
       }
     }
   });

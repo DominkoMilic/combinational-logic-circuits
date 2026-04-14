@@ -556,6 +556,64 @@ const icConfigs: Record<
 
 // ── Exported lookup: element type → SVG component ──
 
+function Const0Svg(props: GateSvgProps) {
+  const {
+    width = 42, height = 42, className,
+    topPins = [], bottomPins = [],
+    onPinContextMenu, pinRef, onBodyContextMenu,
+  } = props;
+  const allPins = [...topPins, ...bottomPins];
+  const hasPins = allPins.length > 0;
+  const pos: Record<string, PinPos> = {};
+  if (hasPins) {
+    bottomPins.forEach((pin) => {
+      pos[pin.refId] = { x: 108, y: 50, sx: 82, sy: 50 };
+    });
+  }
+
+  return (
+    <svg width={width} height={height} viewBox="0 0 100 100" className={className} overflow="visible">
+      <g onContextMenu={onBodyContextMenu}>
+        <rect x="10" y="10" width="72" height="80" rx="10" fill="#b91c1c" stroke="#333" strokeWidth="5" />
+        <text x="46" y="60" textAnchor="middle" fill="white" fontSize="42" fontWeight="bold" fontFamily="monospace">0</text>
+      </g>
+      {hasPins && <PinStubs pins={bottomPins} pos={pos} />}
+      {hasPins && (
+        <PinTargets pins={allPins} pos={pos} onCtx={onPinContextMenu} pRef={pinRef} />
+      )}
+    </svg>
+  );
+}
+
+function Const1Svg(props: GateSvgProps) {
+  const {
+    width = 42, height = 42, className,
+    topPins = [], bottomPins = [],
+    onPinContextMenu, pinRef, onBodyContextMenu,
+  } = props;
+  const allPins = [...topPins, ...bottomPins];
+  const hasPins = allPins.length > 0;
+  const pos: Record<string, PinPos> = {};
+  if (hasPins) {
+    bottomPins.forEach((pin) => {
+      pos[pin.refId] = { x: 108, y: 50, sx: 82, sy: 50 };
+    });
+  }
+
+  return (
+    <svg width={width} height={height} viewBox="0 0 100 100" className={className} overflow="visible">
+      <g onContextMenu={onBodyContextMenu}>
+        <rect x="10" y="10" width="72" height="80" rx="10" fill="#15803d" stroke="#333" strokeWidth="5" />
+        <text x="46" y="60" textAnchor="middle" fill="white" fontSize="42" fontWeight="bold" fontFamily="monospace">1</text>
+      </g>
+      {hasPins && <PinStubs pins={bottomPins} pos={pos} />}
+      {hasPins && (
+        <PinTargets pins={allPins} pos={pos} onCtx={onPinContextMenu} pRef={pinRef} />
+      )}
+    </svg>
+  );
+}
+
 export const gateSvgs: Record<string, React.FC<GateSvgProps>> = {
   buffer: BufferSvg,
   NOT: NotSvg,
@@ -577,4 +635,6 @@ export const gateSvgs: Record<string, React.FC<GateSvgProps>> = {
   DFlipFlop: (p) => <IcSvg {...p} {...icConfigs.DFlipFlop} />,
   JKFlipFlop: (p) => <IcSvg {...p} {...icConfigs.JKFlipFlop} />,
   encoder: (p) => <IcSvg {...p} {...icConfigs.encoder} />,
+  Const0: Const0Svg,
+  Const1: Const1Svg,
 };

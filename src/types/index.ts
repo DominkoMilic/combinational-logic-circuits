@@ -77,7 +77,9 @@ export type ElementType =
   | "MUXm3"
   | "DFlipFlop"
   | "JKFlipFlop"
-  | "encoder";
+  | "encoder"
+  | "Const0"
+  | "Const1";
 
 export type ElementsState = Record<ElementType, CircuitElement[]>;
 

@@ -5,9 +5,15 @@ interface ControlPanelBulbsProps {
   xVariableValues: string[];
 }
 
-function ControlPanelBulbs({ setXVariableValues, xVariableValues }: ControlPanelBulbsProps) {
+function ControlPanelBulbs({
+  setXVariableValues,
+  xVariableValues,
+}: ControlPanelBulbsProps) {
   const [xButtons, setXButtons] = useState(
-    Array.from({ length: 8 }, (_, i) => ({ value: xVariableValues[i], id: `X-${i}` }))
+    Array.from({ length: 8 }, (_, i) => ({
+      value: xVariableValues[i],
+      id: `X-${i}`,
+    })),
   );
 
   useEffect(() => {
@@ -15,7 +21,7 @@ function ControlPanelBulbs({ setXVariableValues, xVariableValues }: ControlPanel
       Array.from({ length: 8 }, (_, i) => ({
         value: xVariableValues?.[i] ?? "0",
         id: `X-${i}`,
-      }))
+      })),
     );
   }, [xVariableValues]);
 
@@ -46,7 +52,9 @@ function ControlPanelBulbs({ setXVariableValues, xVariableValues }: ControlPanel
             <div key={item.id} className="flex flex-col items-center gap-1">
               <div
                 className={`w-4 h-4 rounded-full transition-colors ${
-                  item.value === "1" ? "bg-emerald-400 shadow-sm shadow-emerald-400/60" : "bg-rose-500"
+                  item.value === "1"
+                    ? "bg-green-400 shadow-sm shadow-green-400/60"
+                    : "bg-red-500"
                 }`}
               />
               <button

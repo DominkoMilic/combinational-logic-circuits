@@ -27,6 +27,8 @@ const components = [
   { key: "encoder", label: "Priority encoder" },
   { key: "DFlipFlop", label: "D flip-flop", hasFlipFlopState: true },
   { key: "JKFlipFlop", label: "JK flip-flop", hasFlipFlopState: true },
+  { key: "Const0", label: "Constant 0" },
+  { key: "Const1", label: "Constant 1" },
 ];
 
 // Maps component key -> the setter function key in setFunctions
@@ -51,6 +53,8 @@ const keyToSetterName: Record<string, string> = {
   encoder: "setEncoderElements",
   DFlipFlop: "setDFlipFlopElements",
   JKFlipFlop: "setJkFlipFlopElements",
+  Const0: "setConst0Elements",
+  Const1: "setConst1Elements",
 };
 
 // The element type ID used in the circuit (may differ from config key for encoder)

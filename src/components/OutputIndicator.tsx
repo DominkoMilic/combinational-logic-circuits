@@ -8,7 +8,7 @@ interface OutputIndicatorProps {
     element: { id: string; value: string },
     event: React.MouseEvent,
     cableOption: number,
-    inputNumber: number
+    inputNumber: number,
   ) => void;
   onLoad: boolean;
   setCables: React.Dispatch<React.SetStateAction<Cable[]>>;
@@ -23,7 +23,7 @@ function OutputIndicator({
   const elementRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 1300);
   const [yDiv, setYDiv] = useState(
-    Array.from({ length: 24 }, (_, i) => ({ value: "0", id: `Y-${i}` }))
+    Array.from({ length: 24 }, (_, i) => ({ value: "0", id: `Y-${i}` })),
   );
 
   useEffect(() => {
@@ -37,7 +37,10 @@ function OutputIndicator({
         if (el) {
           const rect = el.getBoundingClientRect();
           adjustCablePositionOnScreenSizeChange(
-            setCables, rect, { value: "0", id: key } as never, "y"
+            setCables,
+            rect,
+            { value: "0", id: key } as never,
+            "y",
           );
         }
       });
@@ -54,7 +57,9 @@ function OutputIndicator({
           key={div.id}
           className={`flex items-center gap-1 px-1.5 flex-1 cursor-pointer select-none text-[10px] text-white font-mono whitespace-nowrap
                       hover:bg-gray-700 transition-colors ${index % 2 === 0 ? "bg-gray-900" : "bg-gray-800"}`}
-          ref={(el) => { elementRefs.current[div.id] = el; }}
+          ref={(el) => {
+            elementRefs.current[div.id] = el;
+          }}
           onContextMenu={(e) => {
             e.preventDefault();
             handleElementClick(div, e, 0, 1);
@@ -63,7 +68,9 @@ function OutputIndicator({
         >
           <div
             className={`w-2.5 h-2.5 rounded-full shrink-0 transition-colors ${
-              div.value === "1" ? "bg-emerald-400 shadow-sm shadow-emerald-400/60" : "bg-rose-500"
+              div.value === "1"
+                ? "bg-green-400 shadow-sm shadow-green-400/60"
+                : "bg-red-500"
             }`}
           />
           {!isSmallScreen && div.id}

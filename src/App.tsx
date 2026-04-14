@@ -30,14 +30,32 @@ import type {
 } from "./types";
 
 const ELEMENT_TYPES: ElementType[] = [
-  "NOT", "buffer", "NOR2Inputs", "NOR3Inputs", "NOR4Inputs", "NOR8Inputs",
-  "NAND2Inputs", "NAND3Inputs", "NAND4Inputs", "NAND8Inputs",
-  "EXOR", "EXNOR", "DEMUXm2", "DEMUXm3", "MUXm1", "MUXm2", "MUXm3",
-  "DFlipFlop", "JKFlipFlop", "encoder",
+  "NOT",
+  "buffer",
+  "NOR2Inputs",
+  "NOR3Inputs",
+  "NOR4Inputs",
+  "NOR8Inputs",
+  "NAND2Inputs",
+  "NAND3Inputs",
+  "NAND4Inputs",
+  "NAND8Inputs",
+  "EXOR",
+  "EXNOR",
+  "DEMUXm2",
+  "DEMUXm3",
+  "MUXm1",
+  "MUXm2",
+  "MUXm3",
+  "DFlipFlop",
+  "JKFlipFlop",
+  "encoder",
+  "Const0",
+  "Const1",
 ];
 
 const INITIAL_ELEMENTS = Object.fromEntries(
-  ELEMENT_TYPES.map((t) => [t, [] as CircuitElement[]])
+  ELEMENT_TYPES.map((t) => [t, [] as CircuitElement[]]),
 ) as unknown as ElementsState;
 
 // Maps element type -> setter function name (preserves backward compat with save/load)
@@ -62,15 +80,21 @@ const TYPE_TO_SETTER: Record<ElementType, string> = {
   DFlipFlop: "setDFlipFlopElements",
   JKFlipFlop: "setJkFlipFlopElements",
   encoder: "setEncoderElements",
+  Const0: "setConst0Elements",
+  Const1: "setConst1Elements",
 };
 
 const SETTER_TO_TYPE: Record<string, ElementType> = Object.fromEntries(
-  Object.entries(TYPE_TO_SETTER).map(([k, v]) => [v, k as ElementType])
+  Object.entries(TYPE_TO_SETTER).map(([k, v]) => [v, k as ElementType]),
 );
 
 function App() {
-  const [xVariableValues, setXVariableValues] = useState<string[]>(Array(8).fill("0"));
-  const [yVariableValues, setYVariableValues] = useState<string[]>(Array(24).fill("0"));
+  const [xVariableValues, setXVariableValues] = useState<string[]>(
+    Array(8).fill("0"),
+  );
+  const [yVariableValues, setYVariableValues] = useState<string[]>(
+    Array(24).fill("0"),
+  );
   const [elements, setElements] = useState<ElementsState>(INITIAL_ELEMENTS);
 
   const [cables, setCables] = useState<Cable[]>([]);
@@ -92,10 +116,11 @@ function App() {
   const [isDragging, setIsDragging] = useState(false);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
   const [isHelp, setIsHelp] = useState(false);
-  const [pinIndicatorPosition, setPinIndicatorPosition] = useState<PinIndicatorPosition>({
-    top: undefined,
-    left: undefined,
-  });
+  const [pinIndicatorPosition, setPinIndicatorPosition] =
+    useState<PinIndicatorPosition>({
+      top: undefined,
+      left: undefined,
+    });
   const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   useEffect(() => {
@@ -106,10 +131,17 @@ function App() {
   const setFunctions: SetFunctions = useMemo(() => {
     const fns: SetFunctions = {};
     for (const [type, setterName] of Object.entries(TYPE_TO_SETTER)) {
-      fns[setterName] = ((updater: CircuitElement[] | ((prev: CircuitElement[]) => CircuitElement[])) => {
+      fns[setterName] = ((
+        updater:
+          | CircuitElement[]
+          | ((prev: CircuitElement[]) => CircuitElement[]),
+      ) => {
         setElements((prev) => ({
           ...prev,
-          [type]: typeof updater === "function" ? updater(prev[type as ElementType]) : updater,
+          [type]:
+            typeof updater === "function"
+              ? updater(prev[type as ElementType])
+              : updater,
         }));
       }) as React.Dispatch<React.SetStateAction<CircuitElement[]>>;
     }
@@ -142,6 +174,8 @@ function App() {
         DFlipFlop: "dFlipFlopElements",
         JKFlipFlop: "jkFlipFlopElements",
         encoder: "encoderElements",
+        Const0: "const0Elements",
+        Const1: "const1Elements",
       };
       result[keyMap[type] || type] = arr;
     }
@@ -153,12 +187,13 @@ function App() {
       element: { id: string; value: string },
       event: React.MouseEvent,
       cableOpt: number,
-      iNumber: number
+      iNumber: number,
     ) => {
       const { clientX, clientY } = event;
-      const position = clientX > 1700
-        ? { top: clientY, left: clientX - 130 }
-        : { top: clientY, left: clientX };
+      const position =
+        clientX > 1700
+          ? { top: clientY, left: clientX - 130 }
+          : { top: clientY, left: clientX };
 
       const elementPosition = calculateCableSpawnPosition(event, element);
 
@@ -176,23 +211,24 @@ function App() {
         },
       ]);
     },
-    []
+    [],
   );
 
   const handleDeleteElementClick = useCallback(
     (event: React.MouseEvent, elementId: string) => {
       setCableToDelete(null);
       const { clientX, clientY } = event;
-      const position = clientX > 1700
-        ? { top: clientY, left: clientX - 130 }
-        : { top: clientY, left: clientX };
+      const position =
+        clientX > 1700
+          ? { top: clientY, left: clientX - 130 }
+          : { top: clientY, left: clientX };
 
       setElementToDelete(elementId);
       setMenuVisible(false);
       setDeletePosition(position);
       setDeleteVisible(true);
     },
-    []
+    [],
   );
 
   const handleDeleteCableClick = useCallback(
@@ -200,9 +236,10 @@ function App() {
       setSelectedElement([]);
       setPinIndicatorPosition({ top: undefined, left: undefined });
       const { clientX, clientY } = event;
-      const position = clientX > 1700
-        ? { top: clientY, left: clientX - 130 }
-        : { top: clientY, left: clientX };
+      const position =
+        clientX > 1700
+          ? { top: clientY, left: clientX - 130 }
+          : { top: clientY, left: clientX };
 
       setCableToDelete(cable);
       setMenuVisible(false);
@@ -210,14 +247,14 @@ function App() {
       setDeleteVisible(true);
       setJointPosition({ x: clientX, y: clientY });
     },
-    []
+    [],
   );
 
   const handleDragElement = useCallback(
     (
       element: CircuitElement,
       positions: ({ x: number; y: number; id: string } | null)[],
-      newElementPosition?: { x: number; y: number }
+      newElementPosition?: { x: number; y: number },
     ) => {
       setSelectedElement([]);
       setPinIndicatorPosition({ top: undefined, left: undefined });
@@ -234,22 +271,34 @@ function App() {
         prevCables.map((cable) => {
           const updatedCable = { ...cable };
           const elId = element.id;
-          const c1Id = cable.element1.id.split("-")[0] + "-" + cable.element1.id.split("-")[1];
-          const c2Id = cable.element2.id.split("-")[0] + "-" + cable.element2.id.split("-")[1];
+          const c1Id =
+            cable.element1.id.split("-")[0] +
+            "-" +
+            cable.element1.id.split("-")[1];
+          const c2Id =
+            cable.element2.id.split("-")[0] +
+            "-" +
+            cable.element2.id.split("-")[1];
 
           if (c1Id === elId) {
-            const newPos = positions.find((pos) => pos?.id === cable.element1.id.split("-")[2]);
-            if (newPos) updatedCable.element1 = { ...cable.element1, position: newPos };
+            const newPos = positions.find(
+              (pos) => pos?.id === cable.element1.id.split("-")[2],
+            );
+            if (newPos)
+              updatedCable.element1 = { ...cable.element1, position: newPos };
           } else if (c2Id === elId) {
-            const newPos = positions.find((pos) => pos?.id === cable.element2.id.split("-")[2]);
-            if (newPos) updatedCable.element2 = { ...cable.element2, position: newPos };
+            const newPos = positions.find(
+              (pos) => pos?.id === cable.element2.id.split("-")[2],
+            );
+            if (newPos)
+              updatedCable.element2 = { ...cable.element2, position: newPos };
           }
 
           return updatedCable;
-        })
+        }),
       );
     },
-    []
+    [],
   );
 
   // Circuit recalculation
@@ -257,11 +306,22 @@ function App() {
     if (isDragging) return;
     const updatedCables = updateCablesAndElements(cables, xVariableValues);
     try {
-      updateYDiv(updatedCables, setYVariableValues, elements.DFlipFlop, elements.JKFlipFlop);
+      updateYDiv(
+        updatedCables,
+        setYVariableValues,
+        elements.DFlipFlop,
+        elements.JKFlipFlop,
+      );
     } catch (error) {
       console.error("Error updating output values: ", error);
     }
-  }, [xVariableValues, cables, elements.DFlipFlop, elements.JKFlipFlop, isDragging]);
+  }, [
+    xVariableValues,
+    cables,
+    elements.DFlipFlop,
+    elements.JKFlipFlop,
+    isDragging,
+  ]);
 
   // Drag tracking
   useEffect(() => {
@@ -282,21 +342,27 @@ function App() {
   };
 
   const handleJointDrag = useCallback(
-    (event: { clientX: number; clientY: number }, cableId: string, jointIndex: number) => {
+    (
+      event: { clientX: number; clientY: number },
+      cableId: string,
+      jointIndex: number,
+    ) => {
       setCables((prevCables) =>
         prevCables.map((cable) =>
           cable.id === cableId
             ? {
                 ...cable,
                 joints: cable.joints.map((joint, index) =>
-                  index === jointIndex ? { x: event.clientX, y: event.clientY } : joint
+                  index === jointIndex
+                    ? { x: event.clientX, y: event.clientY }
+                    : joint,
                 ),
               }
-            : cable
-        )
+            : cable,
+        ),
       );
     },
-    []
+    [],
   );
 
   if (isSmallScreen) {
@@ -304,7 +370,10 @@ function App() {
       <div className="flex items-center justify-center h-screen p-8 text-center">
         <div>
           <h1 className="text-2xl font-bold mb-2">Screen Too Small</h1>
-          <p>We are sorry but app currently does not support small screen devices.</p>
+          <p>
+            We are sorry but app currently does not support small screen
+            devices.
+          </p>
         </div>
       </div>
     );
@@ -330,8 +399,14 @@ function App() {
         </div>
 
         {/* Center - Draggable area */}
-        <div className="draggable-area bg-gray-50 h-full w-[80%] relative"
-             style={{ backgroundImage: "radial-gradient(circle, #d1d5db 1px, transparent 1px)", backgroundSize: "20px 20px" }}>
+        <div
+          className="draggable-area bg-gray-50 h-full w-[80%] relative"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, #d1d5db 1px, transparent 1px)",
+            backgroundSize: "20px 20px",
+          }}
+        >
           <Gates
             elements={elements}
             handleElementClick={handleElementClick}
@@ -424,15 +499,16 @@ function App() {
         handleJointDrag={handleJointDrag}
       />
 
-      {pinIndicatorPosition.top != null && pinIndicatorPosition.left != null && (
-        <div
-          className="absolute w-5 h-5 bg-emerald-400 rounded-[30%] z-0 shadow-lg shadow-emerald-400/50"
-          style={{
-            top: pinIndicatorPosition.top,
-            left: pinIndicatorPosition.left,
-          }}
-        />
-      )}
+      {pinIndicatorPosition.top != null &&
+        pinIndicatorPosition.left != null && (
+          <div
+            className="absolute w-5 h-5 bg-green-400 rounded-[30%] z-0 shadow-lg shadow-green-400/50"
+            style={{
+              top: pinIndicatorPosition.top,
+              left: pinIndicatorPosition.left,
+            }}
+          />
+        )}
     </div>
   );
 }

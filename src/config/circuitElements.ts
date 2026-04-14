@@ -409,4 +409,26 @@ export const circuitConfigs: Record<string, CircuitElementConfig> = {
       inputPin(15, "inputA", 1),
     ],
   },
+
+  Const0: {
+    name: "Const0",
+    width: 50,
+    height: 50,
+    imageWidth: 42,
+    imageHeight: 42,
+    layout: "horizontal",
+    topPins: [],
+    bottomPins: [outputPin(0, "output0", 1)],
+  },
+
+  Const1: {
+    name: "Const1",
+    width: 50,
+    height: 50,
+    imageWidth: 42,
+    imageHeight: 42,
+    layout: "horizontal",
+    topPins: [],
+    bottomPins: [outputPin(0, "output0", 1)],
+  },
 };

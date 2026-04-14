@@ -30,11 +30,6 @@ function BulbsAndButtons({
     Array.from({ length: 8 }, (_, i) => ({ value: xVariableValues[i], id: `X-${i}` }))
   );
 
-  const constantX = [
-    { value: "0", id: "X-8-constant" },
-    { value: "1", id: "X-9-constant" },
-  ];
-
   useEffect(() => {
     setXButtons(
       Array.from({ length: 8 }, (_, i) => ({
@@ -72,14 +67,10 @@ function BulbsAndButtons({
 
   useEffect(() => {
     function handleResize() {
-      Object.entries(elementRefs.current).forEach(([key, el], index) => {
+      Object.entries(elementRefs.current).forEach(([, el], index) => {
         if (!el) return;
         const rect = el.getBoundingClientRect();
-        if (key === "X-8-constant") {
-          adjustCablePositionOnScreenSizeChange(setCables, rect, { value: "0", id: "X-8-constant" } as never, "x");
-        } else if (key === "X-9-constant") {
-          adjustCablePositionOnScreenSizeChange(setCables, rect, { value: "1", id: "X-9-constant" } as never, "x");
-        } else if (index % 2 === 0) {
+        if (index % 2 === 0) {
           const btnIdx = index / 2;
           if (xButtons[btnIdx]) {
             adjustCablePositionOnScreenSizeChange(
@@ -130,24 +121,6 @@ function BulbsAndButtons({
         </div>
       ))}
 
-      <div className="flex gap-1 px-1 py-1 justify-end bg-gray-900">
-        <div
-          className="text-[10px] text-white font-mono cursor-pointer select-none
-                     bg-rose-700 px-1.5 py-0.5 rounded hover:bg-rose-600 transition-colors"
-          ref={(el) => { elementRefs.current["X-8-constant"] = el; }}
-          onContextMenu={(e) => { e.preventDefault(); handleDivClick(constantX[0], e); }}
-        >
-          0
-        </div>
-        <div
-          className="text-[10px] text-white font-mono cursor-pointer select-none
-                     bg-emerald-700 px-1.5 py-0.5 rounded hover:bg-emerald-600 transition-colors"
-          ref={(el) => { elementRefs.current["X-9-constant"] = el; }}
-          onContextMenu={(e) => { e.preventDefault(); handleDivClick(constantX[1], e); }}
-        >
-          1
-        </div>
-      </div>
     </div>
   );
 }
