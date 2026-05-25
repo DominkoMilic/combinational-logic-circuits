@@ -643,12 +643,12 @@ function XVarSvg(props: GateSvgProps) {
         <line x1="74" y1="14" x2="74" y2="96" stroke="#0f172a" strokeWidth="1.5" opacity="0.5" />
 
         <circle
-          cx="38" cy="32" r="14"
+          cx="42" cy="32" r="14"
           fill={isOn ? "#22c55e" : "#dc2626"}
           stroke="#0f172a" strokeWidth="2.5"
         />
         <circle
-          cx="33" cy="27" r="3.5"
+          cx="37" cy="27" r="3.5"
           fill={isOn ? "#bbf7d0" : "#fecaca"}
           opacity="0.7"
         />
@@ -663,14 +663,14 @@ function XVarSvg(props: GateSvgProps) {
         className="xvar-toggle cursor-pointer transition-all duration-150 hover:brightness-125"
         onMouseDown={(e) => e.stopPropagation()}
         onClick={(e) => { e.stopPropagation(); onToggle?.(); }}
-        style={{ transformOrigin: "38px 71px", transformBox: "fill-box" }}
+        style={{ transformOrigin: "42px 71px", transformBox: "fill-box" }}
       >
         <rect
-          x="10" y="58" width="56" height="26" rx="6"
+          x="14" y="58" width="56" height="26" rx="6"
           fill="#475569"
           stroke="#0f172a" strokeWidth="2"
         />
-        <text x="38" y="76" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold" fontFamily="sans-serif">
+        <text x="42" y="76" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold" fontFamily="sans-serif">
           {isOn ? "ON" : "OFF"}
         </text>
       </g>
