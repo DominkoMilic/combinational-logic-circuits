@@ -15,6 +15,8 @@ export interface GateSvgProps extends SvgProps {
   onPinContextMenu?: (pin: PinConfig, e: React.MouseEvent) => void;
   pinRef?: (refIndex: number, refId: string, el: Element | null) => void;
   onBodyContextMenu?: (e: React.MouseEvent) => void;
+  value?: string;
+  onToggle?: () => void;
 }
 
 interface PinPos {
@@ -614,6 +616,72 @@ function Const1Svg(props: GateSvgProps) {
   );
 }
 
+function XVarSvg(props: GateSvgProps) {
+  const {
+    width = 65, height = 54, className,
+    topPins = [], bottomPins = [],
+    onPinContextMenu, pinRef, onBodyContextMenu,
+    value = "0", onToggle,
+  } = props;
+  const allPins = [...topPins, ...bottomPins];
+  const hasPins = allPins.length > 0;
+  const pos: Record<string, PinPos> = {};
+  if (hasPins) {
+    bottomPins.forEach((pin, i) => {
+      const y = i === 0 ? 28 : 82;
+      pos[pin.refId] = { x: 138, y, sx: 110, sy: y };
+    });
+  }
+  const isOn = value === "1";
+
+  return (
+    <svg width={width} height={height} viewBox="0 0 130 110" className={className} overflow="visible">
+      <g onContextMenu={onBodyContextMenu}>
+        <rect x="6" y="6" width="118" height="98" rx="12" fill="#1e3a8a" stroke="#0f172a" strokeWidth="4" />
+        <rect x="11" y="11" width="108" height="88" rx="9" fill="#1e40af" stroke="#3b82f6" strokeWidth="1" />
+
+        <line x1="74" y1="14" x2="74" y2="96" stroke="#0f172a" strokeWidth="1.5" opacity="0.5" />
+
+        <circle
+          cx="38" cy="32" r="14"
+          fill={isOn ? "#22c55e" : "#dc2626"}
+          stroke="#0f172a" strokeWidth="2.5"
+        />
+        <circle
+          cx="33" cy="27" r="3.5"
+          fill={isOn ? "#bbf7d0" : "#fecaca"}
+          opacity="0.7"
+        />
+
+        <text x="96" y="34" textAnchor="middle" fill="white" fontSize="18" fontWeight="bold" fontFamily="monospace">X</text>
+        <g>
+          <text x="96" y="90" textAnchor="middle" fill="white" fontSize="18" fontWeight="bold" fontFamily="monospace">X</text>
+          <line x1="87" y1="74" x2="105" y2="74" stroke="white" strokeWidth="2" />
+        </g>
+      </g>
+      <g
+        className="xvar-toggle cursor-pointer transition-all duration-150 hover:brightness-125"
+        onMouseDown={(e) => e.stopPropagation()}
+        onClick={(e) => { e.stopPropagation(); onToggle?.(); }}
+        style={{ transformOrigin: "38px 71px", transformBox: "fill-box" }}
+      >
+        <rect
+          x="10" y="58" width="56" height="26" rx="6"
+          fill="#475569"
+          stroke="#0f172a" strokeWidth="2"
+        />
+        <text x="38" y="76" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold" fontFamily="sans-serif">
+          {isOn ? "ON" : "OFF"}
+        </text>
+      </g>
+      {hasPins && <PinStubs pins={bottomPins} pos={pos} />}
+      {hasPins && (
+        <PinTargets pins={allPins} pos={pos} onCtx={onPinContextMenu} pRef={pinRef} />
+      )}
+    </svg>
+  );
+}
+
 export const gateSvgs: Record<string, React.FC<GateSvgProps>> = {
   buffer: BufferSvg,
   NOT: NotSvg,
@@ -637,4 +705,5 @@ export const gateSvgs: Record<string, React.FC<GateSvgProps>> = {
   encoder: (p) => <IcSvg {...p} {...icConfigs.encoder} />,
   Const0: Const0Svg,
   Const1: Const1Svg,
+  XVar: XVarSvg,
 };

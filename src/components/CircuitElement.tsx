@@ -18,6 +18,7 @@ interface CircuitElementProps {
     positions: ({ x: number; y: number; id: string } | null)[],
     newPosition?: { x: number; y: number }
   ) => void;
+  handleToggleElement?: (elementId: string) => void;
   onLoad: boolean;
 }
 
@@ -27,6 +28,7 @@ function CircuitElement({
   handleElementClick,
   handleDeleteElementClick,
   handleDragElement,
+  handleToggleElement,
   onLoad,
 }: CircuitElementProps) {
   const draggableRef = useRef<HTMLDivElement>(null);
@@ -98,6 +100,7 @@ function CircuitElement({
     <Draggable
       axis="both"
       handle=".handle"
+      cancel=".xvar-toggle"
       defaultPosition={defaultPos}
       position={undefined}
       scale={1}
@@ -121,6 +124,12 @@ function CircuitElement({
               onPinContextMenu={handlePinContextMenu}
               pinRef={handlePinRef}
               onBodyContextMenu={handleDeleteClick}
+              value={element.value}
+              onToggle={
+                handleToggleElement
+                  ? () => handleToggleElement(element.id)
+                  : undefined
+              }
             />
           )}
         </div>

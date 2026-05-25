@@ -52,6 +52,7 @@ const ELEMENT_TYPES: ElementType[] = [
   "encoder",
   "Const0",
   "Const1",
+  "XVar",
 ];
 
 const INITIAL_ELEMENTS = Object.fromEntries(
@@ -82,6 +83,7 @@ const TYPE_TO_SETTER: Record<ElementType, string> = {
   encoder: "setEncoderElements",
   Const0: "setConst0Elements",
   Const1: "setConst1Elements",
+  XVar: "setXVarElements",
 };
 
 const SETTER_TO_TYPE: Record<string, ElementType> = Object.fromEntries(
@@ -176,6 +178,7 @@ function App() {
         encoder: "encoderElements",
         Const0: "const0Elements",
         Const1: "const1Elements",
+        XVar: "xVarElements",
       };
       result[keyMap[type] || type] = arr;
     }
@@ -250,6 +253,18 @@ function App() {
     [],
   );
 
+  const handleToggleElement = useCallback((elementId: string) => {
+    const type = elementId.split("-")[0] as ElementType;
+    setElements((prev) => ({
+      ...prev,
+      [type]: prev[type].map((el) =>
+        el.id === elementId
+          ? { ...el, value: el.value === "1" ? "0" : "1" }
+          : el,
+      ),
+    }));
+  }, []);
+
   const handleDragElement = useCallback(
     (
       element: CircuitElement,
@@ -304,7 +319,11 @@ function App() {
   // Circuit recalculation
   useEffect(() => {
     if (isDragging) return;
-    const updatedCables = updateCablesAndElements(cables, xVariableValues);
+    const updatedCables = updateCablesAndElements(
+      cables,
+      xVariableValues,
+      elements.XVar,
+    );
     try {
       updateYDiv(
         updatedCables,
@@ -320,6 +339,7 @@ function App() {
     cables,
     elements.DFlipFlop,
     elements.JKFlipFlop,
+    elements.XVar,
     isDragging,
   ]);
 
@@ -412,6 +432,7 @@ function App() {
             handleElementClick={handleElementClick}
             handleDeleteElementClick={handleDeleteElementClick}
             handleDragElement={handleDragElement}
+            handleToggleElement={handleToggleElement}
             onLoad={onLoad}
           />
         </div>

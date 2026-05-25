@@ -23,7 +23,11 @@ const allComponents = [
 let fullDFlipFlopElements: CircuitElement[] = [];
 let fullJKFlipFlopElements: CircuitElement[] = [];
 
-export const updateCablesAndElements = (cables: Cable[], xVariableValues: string[]) => {
+export const updateCablesAndElements = (
+  cables: Cable[],
+  xVariableValues: string[],
+  xVarElements: CircuitElement[] = [],
+) => {
   return cables.map((cable) => {
     let newElement1: CableEndpoint;
     const prefix = cable.element1.id.split("-")[0];
@@ -36,6 +40,10 @@ export const updateCablesAndElements = (cables: Cable[], xVariableValues: string
       newElement1 = { ...cable.element1, value: "0" };
     } else if (prefix === "Const1") {
       newElement1 = { ...cable.element1, value: "1" };
+    } else if (prefix === "XVar") {
+      const idx = cable.element1.id.split("-")[1];
+      const xv = xVarElements.find((e) => e.id === `XVar-${idx}`);
+      newElement1 = { ...cable.element1, value: xv?.value === "1" ? "1" : "0" };
     } else {
       newElement1 = { ...cable.element1 };
     }
@@ -81,6 +89,13 @@ const findPath = (cables: { element1: CableEndpoint; element2: CableEndpoint }[]
         path.push({ ...cable.element1, calculatedValue: "0" });
       } else if (prefix === "Const1") {
         path.push({ ...cable.element1, calculatedValue: "1" });
+      } else if (prefix === "XVar") {
+        const isNot = cable.element1.id.split("-")[2] === "output1";
+        const v = cable.element1.value === "1" ? "1" : "0";
+        path.push({
+          ...cable.element1,
+          calculatedValue: isNot ? (v === "1" ? "0" : "1") : v,
+        });
       } else {
         findPath(cables, path, cable.element1.id);
       }

@@ -9,6 +9,7 @@ interface ScrollBoxProps {
 const components = [
   { key: "Const0", label: "Constant 0" },
   { key: "Const1", label: "Constant 1" },
+  { key: "XVar", label: "X variable" },
   { key: "buffer", label: "Buffer" },
   { key: "NOT", label: "NOT" },
   { key: "NOR2Inputs", label: "NOR 2 inputs" },
@@ -35,6 +36,7 @@ const components = [
 const keyToSetterName: Record<string, string> = {
   Const0: "setConst0Elements",
   Const1: "setConst1Elements",
+  XVar: "setXVarElements",
   NOT: "setNotElements",
   buffer: "setBufferElements",
   NOR2Inputs: "setNor2InputsElements",

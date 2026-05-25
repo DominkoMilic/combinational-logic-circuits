@@ -79,7 +79,8 @@ export type ElementType =
   | "JKFlipFlop"
   | "encoder"
   | "Const0"
-  | "Const1";
+  | "Const1"
+  | "XVar";
 
 export type ElementsState = Record<ElementType, CircuitElement[]>;
 

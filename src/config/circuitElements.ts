@@ -431,4 +431,15 @@ export const circuitConfigs: Record<string, CircuitElementConfig> = {
     topPins: [],
     bottomPins: [outputPin(0, "output0", 1)],
   },
+
+  XVar: {
+    name: "XVar",
+    width: 70,
+    height: 58,
+    imageWidth: 65,
+    imageHeight: 54,
+    layout: "horizontal",
+    topPins: [],
+    bottomPins: [outputPin(0, "output0", 1), outputPin(1, "output1", 1)],
+  },
 };

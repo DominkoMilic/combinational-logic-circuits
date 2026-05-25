@@ -16,6 +16,7 @@ interface GatesProps {
     positions: ({ x: number; y: number; id: string } | null)[],
     newPosition?: { x: number; y: number }
   ) => void;
+  handleToggleElement: (elementId: string) => void;
   onLoad: boolean;
 }
 
@@ -42,6 +43,7 @@ const elementTypeToConfig: Record<string, string> = {
   encoder: "encoder",
   Const0: "Const0",
   Const1: "Const1",
+  XVar: "XVar",
 };
 
 function Gates({
@@ -49,6 +51,7 @@ function Gates({
   handleElementClick,
   handleDeleteElementClick,
   handleDragElement,
+  handleToggleElement,
   onLoad,
 }: GatesProps) {
   return (
@@ -66,6 +69,7 @@ function Gates({
             handleElementClick={handleElementClick}
             handleDeleteElementClick={handleDeleteElementClick}
             handleDragElement={handleDragElement}
+            handleToggleElement={handleToggleElement}
             onLoad={onLoad}
           />
         ));
